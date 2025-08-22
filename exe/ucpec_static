@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+begin
+  require "ucpec_static"
+rescue LoadError
+  # In development
+  require "bundler/setup"
+  require "pry"
+  require "ucpec_static"
+end
+
+Dry::CLI.new(UCPECStatic::Commands).call
