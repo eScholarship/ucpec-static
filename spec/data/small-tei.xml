@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI.2>
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Test Document</title>
+        <author>Jane Smith</author>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>Test Publisher</publisher>
+        <date>2024</date>
+      </publicationStmt>
+      <sourceDesc>
+        <p>Source description here.</p>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <p>This is a <hi rend="bold">bold</hi> word.</p>
+      <quote>This is a quote.</quote>
+      <seg>This is a segment.</seg>
+      <sp>
+        <speaker>John Doe</speaker>
+        <p>This is a speech.</p>
+      </sp>
+    </body>
+  </text>
+</TEI.2>

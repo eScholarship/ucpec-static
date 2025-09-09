@@ -4,8 +4,6 @@ module UCPECStatic
   module TEI
     module NodeExtraction
       module State
-        include UCPECStatic::TEI::ReadsNodeStack
-
         include Dry::Effects.Reader(:context)
 
         delegate :input,

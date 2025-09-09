@@ -43,4 +43,17 @@ end
 
 loader.eager_load
 
+# Must happen _after_ eager-loading.
+UCPECStatic::Application.register("tei.matchable_node_klasses", memoize: true) do
+  UCPECStatic::TEI::Nodes::Abstract.matchable_node_klasses
+end
+
+UCPECStatic::Application.register("tei.known_tags", memoize: true) do
+  UCPECStatic::Application["tei.matchable_node_klasses"].flat_map do |kls|
+    kls.tei_tag_patterns.select { _1.kind_of?(String) }
+  end.sort do |a, b|
+    a.casecmp(b)
+  end.freeze
+end
+
 UCPECStatic::Application.finalize!

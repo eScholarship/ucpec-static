@@ -10,12 +10,11 @@ module UCPECStatic
       module HasProgressBar
         extend ActiveSupport::Concern
 
-        included do
-          after_initialize :set_up_bar!
-        end
-
+        # @!attribute [r] bar
         # @return [ProgressBar]
-        attr_reader :bar
+        def bar
+          @bar ||= build_bar
+        end
 
         def close
           bar.try(:finish)
@@ -62,8 +61,8 @@ module UCPECStatic
         end
 
         # @return [void]
-        def set_up_bar!
-          @bar = ProgressBar.create(**progress_bar_options)
+        def build_bar
+          ProgressBar.create(**progress_bar_options)
         end
       end
     end

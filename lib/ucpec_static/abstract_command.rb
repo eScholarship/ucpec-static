@@ -72,8 +72,11 @@ module UCPECStatic
             on_success! result
           end
 
-          m.failure do
+          m.failure do |*err|
+            # :nocov:
             warn Paint["Something went wrong!", :red, :bright]
+            warn Paint[err.flatten.join(" ").indent(2), :yellow, :italic]
+            # :nocov:
           end
         end
       else
@@ -118,32 +121,6 @@ module UCPECStatic
 
     def write_raw!(...)
       puts(...)
-    end
-
-    # @param [<Users::Result>] users
-    # @return [String]
-    def build_user_result_table
-      options = {
-        title: "Time Tracker Users (ENV: #{env_name})",
-        headings: [
-          "Query",
-          "Found?",
-          "User ID",
-          "Email",
-          "Siemens Email",
-          "Role",
-        ],
-        style: {
-          border: Terminal::Table::UnicodeThickEdgeBorder.new,
-          width: 240,
-        }
-      }
-
-      table = Terminal::Table.new(options) do |t|
-        yield t
-      end
-
-      return table
     end
 
     class << self

@@ -6,6 +6,8 @@ module UCPECStatic
 
     extend Support::EnhancedTypes
 
+    AttributeMap = Hash.map(Coercible::Symbol, Any)
+
     BroadcastLogger = Instance(UCPECStatic::Support::BroadcastLogger)
 
     Logger = BroadcastLogger
@@ -21,7 +23,22 @@ module UCPECStatic
       end
     end
 
+    Pattern = Instance(Regexp)
+
+    Patterns = Array.of(Pattern)
+
+    RenderOrder = Types::Symbol.default(:after_content).enum(:none, :before_content, :after_content)
+
+    TagPattern = Pattern | String
+
+    TagPatterns = Array.of(TagPattern)
+
     URL = String | Instance(::URI)
+
+    XMLAttributeAction = Types::Symbol.enum(:copy, :data_attribute, :html_class, :skip)
+    XMLAttributeCallable = Instance(Proc)
+    XMLAttributeHandler = XMLAttributeAction | XMLAttributeCallable
+    XMLAttributeHandlers = Hash.map(Coercible::String, XMLAttributeHandler)
 
     XMLNode = Instance(Nokogiri::XML::Node)
 

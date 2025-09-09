@@ -15,9 +15,11 @@ module UCPECStatic
         end
 
         def default_env
+          # :nocov:
           fetch_or_store __method__ do
             UCPECStatic::Application["env.build"].().value!
           end
+          # :nocov:
         end
       end
     end

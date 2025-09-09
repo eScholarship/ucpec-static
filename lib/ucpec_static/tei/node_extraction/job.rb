@@ -3,6 +3,8 @@
 module UCPECStatic
   module TEI
     module NodeExtraction
+      # A job that extracts a TEI node into its corresponding Ruby object.
+      # It will be run recursively to handle child nodes as needed.
       class Job < UCPECStatic::Pipeline::AbstractJob
         using UCPECStatic::XML::Refinements
 
@@ -24,10 +26,6 @@ module UCPECStatic
         # @return [Class]
         simple_reader! :node_klass
 
-        # @!attribute [r] node_stack
-        # @return [<Nokogiri::XML::Node>]
-        simple_reader! :node_stack
-
         # @!attribute [r] root
         # @return [Boolean]
         simple_reader! :root
@@ -42,6 +40,7 @@ module UCPECStatic
         build_job! do |job|
           source UCPECStatic::TEI::NodeExtraction::Source
 
+          # Recursively generate nodes for any children.
           transform UCPECStatic::TEI::ExtractNodes
 
           destination UCPECStatic::TEI::NodeExtraction::Destination
@@ -56,9 +55,9 @@ module UCPECStatic
 
           @node_attributes = { input:, node:, }
 
-          @node_klass = call_operation!("tei.determine_node_klass", node)
+          @node_klass = call_operation("tei.determine_node_klass", node).value_or(UCPECStatic::TEI::Nodes::Unknown)
 
-          @skips_children = node.text? || node.children.reject(&:skippable_text_node?).blank?
+          @skips_children = should_skip_children_for?(node)
 
           yield extract_attributes!
 
@@ -98,6 +97,13 @@ module UCPECStatic
             root:,
             skips_children:,
           )
+        end
+
+        # @param [Nokogiri::XML::Node] node
+        def should_skip_children_for?(node)
+          return false unless node_klass.element_klass?
+
+          node.children.reject(&:skippable_text_node?).blank?
         end
       end
     end

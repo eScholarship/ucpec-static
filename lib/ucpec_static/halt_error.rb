@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module UCPECStatic
+  # An error indicating that an application operation must halt.
+  # @note Future-proofing.
   class HaltError < StandardError
     extend Dry::Core::ClassAttributes
 
     defines :message_format, type: Types::String
-
-    message_format "Application operation halted."
 
     # @return [{ Symbol => Object }]
     attr_reader :details
@@ -31,5 +31,7 @@ module UCPECStatic
         message_format message.strip_heredoc.strip
       end
     end
+
+    message_format! "Application operation halted."
   end
 end
