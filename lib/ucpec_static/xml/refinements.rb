@@ -12,6 +12,20 @@ module UCPECStatic
           previous_sibling_element? && next_sibling_element?
         end
 
+        # @return [String]
+        def cache_key
+          case node_type
+          in Nokogiri::XML::Node::TEXT_NODE
+            "xml/text"
+          in Nokogiri::XML::Node::COMMENT_NODE
+            "xml/comment"
+          in Nokogiri::XML::Node::ELEMENT_NODE
+            "xml/element/#{node_name}"
+          else
+            "xml/unknown/#{node_type}"
+          end
+        end
+
         def skippable_text_node?
           return false unless text?
 

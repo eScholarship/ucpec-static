@@ -5,7 +5,7 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in ucpec_static.gemspec
 gemspec
 
-group :development do
+group :development, :test do
   gem "irb"
   gem "pry", "~> 0.15"
 
@@ -21,5 +21,5 @@ group :development do
   gem "stackprof", "~> 0.2.25", require: false
   gem "simplecov", "~> 0.22.0", require: false
   gem "test-prof", "~> 1.4.4", require: false
-  gem "timecop", "~> 0.9.8", require: false
+  gem "webmock", "~> 3.25.1", require: false
 end

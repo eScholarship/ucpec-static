@@ -3,6 +3,9 @@
 module UCPECStatic
   module Commands
     module TEI
+      # The main command for this application: convert a TEI XML file to HTML.
+      #
+      # @see UCPECStatic::TEI::HTMLConversion::Job
       class ToHTML < UCPECStatic::AbstractCommand
         desc "Convert a single TEI document to HTML"
 
@@ -10,6 +13,11 @@ module UCPECStatic
           type: :string
 
         runs_job! UCPECStatic::TEI::HTMLConversion::Job
+
+        # @param [StringIO] sio
+        def on_success!(sio)
+          write_raw! sio.string
+        end
       end
     end
   end

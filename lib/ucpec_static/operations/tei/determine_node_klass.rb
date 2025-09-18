@@ -4,42 +4,28 @@ module UCPECStatic
   module Operations
     module TEI
       class DetermineNodeKlass
-        include Dry::Monads[:result, :maybe]
+        using UCPECStatic::XML::Refinements
 
-        PATTERNS = {
-          /\Adiv\d+\z/i => "Division",
-          /\ATEI\.2\z/i => "Root",
-        }.freeze
+        extend Dry::Core::Cache
 
-        RENAMED = {
-          p: "Paragraph",
-          teiHeader: "DocumentHeader",
-        }.freeze
+        include Dry::Monads[:result]
 
-        DIRECT = %w[
-          back
-          body
-          figure
-          front
-          text
-        ].index_with(&:classify).freeze
-
-        TAG_TO_KLASS = PATTERNS.merge(RENAMED).merge(DIRECT).transform_keys do |key|
-          case key
-          when Regexp then key
-          else
-            /\A#{key}\z/i
-          end
-        end.transform_values do |val|
-          "UCPECStatic::TEI::Elements::#{val}".constantize
-        end.freeze
+        include UCPECStatic::Deps[
+          node_klasses: "tei.matchable_node_klasses",
+        ]
 
         # @param [Nokogiri::XML::Node] node
         # @return [Dry::Monads::Success(Class)]
         def call(node)
-          return Success(UCPECStatic::TEI::Nodes::TextContent) if node.text?
+          Types::XMLNode[node]
+        rescue Dry::Types::ConstraintError
+          raise TypeError, "must provide an XML node"
+        else
+          klass = fetch_or_store :derived, node.cache_key do
+            klass_for node
+          end
 
-          Maybe(klass_for(node)).to_result.or { Success(UCPECStatic::TEI::Nodes::Element) }
+          Success klass
         end
 
         private
@@ -47,11 +33,13 @@ module UCPECStatic
         # @param [Nokogiri::XML::Node] node
         # @return [Class, nil]
         def klass_for(node)
-          TAG_TO_KLASS.each do |pattern, klass|
-            return klass if pattern.match?(node.name)
+          node_klasses.each do |klass|
+            return klass if klass.matches_tei_node?(node)
           end
 
-          return nil
+          # :nocov:
+          return UCPECStatic::TEI::Nodes::Unknown
+          # :nocov:
         end
       end
     end

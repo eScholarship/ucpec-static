@@ -13,6 +13,7 @@ module UCPECStatic
       include Dry::Monads[:result]
 
       include UCPECStatic::Pipeline::Ext::Default
+      include UCPECStatic::Support::CallsCommonOperation
 
       define_model_callbacks :initialize, only: %i[after]
 

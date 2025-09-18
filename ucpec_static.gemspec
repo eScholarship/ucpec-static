@@ -52,6 +52,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "dry-transformer", "~> 1.0"
   spec.add_dependency "dry-types", "~> 1.8.3"
   spec.add_dependency "dry-validation", "~> 1.11.0"
+  spec.add_dependency "htmlbeautifier", "~> 1.4.3"
   spec.add_dependency "kiba", "~> 4.0"
   spec.add_dependency "logger", "~> 1.7"
   spec.add_dependency "nokogiri", "~> 1.18.9"

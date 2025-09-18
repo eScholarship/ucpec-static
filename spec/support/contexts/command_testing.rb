@@ -104,14 +104,14 @@ module TestHelpers
         tester = dsl.__send__(:to_tester)
 
         expect do
-          run_command! *tester.args
+          run_command!(*tester.args)
         end.to tester.expectation
       end
 
       def run_command!(*args)
         args.flatten!
 
-        arguments = [*args]
+        arguments = [*args].map(&:to_s)
 
         Dry::CLI.new(UCPECStatic::Commands).call(arguments:)
       end

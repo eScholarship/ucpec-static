@@ -4,12 +4,18 @@ module UCPECStatic
   module TEI
     module Elements
       class Root < UCPECStatic::TEI::Nodes::Element
+        matches_tei_tag! "TEI"
+
+        matches_tei_tag! "TEI.2"
+
+        uses_html_tag! :main
+
         memoize def header
-          children.detect { _1.kind_of?(DocumentHeader) }
+          find_first_descendant { _1.kind_of?(DocumentHeader) }
         end
 
         memoize def text
-          children.detect { _1.kind_of?(Text) }
+          find_first_descendant { _1.kind_of?(Text) }
         end
       end
     end

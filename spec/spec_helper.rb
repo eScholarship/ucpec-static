@@ -2,7 +2,11 @@
 
 require "bundler/setup"
 
+require "pry"
 require "simplecov"
+require "webmock/rspec"
+require "rspec/collection_matchers"
+require "rspec/json_expectations"
 
 SimpleCov.start do
   enable_coverage :branch

@@ -4,8 +4,6 @@ module UCPECStatic
   module TEI
     module NodeExtraction
       class Context < Support::FlexibleStruct
-        include ReadsNodeStack
-
         attribute :input, NodeExtraction::ParsedOrNode
 
         attribute :node, Types::XMLNode
