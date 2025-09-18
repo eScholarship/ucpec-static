@@ -58,6 +58,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "nokogiri", "~> 1.18.9"
   spec.add_dependency "paint", "~> 2.3.0"
   spec.add_dependency "pathname", ">= 0.4"
+  spec.add_dependency "ruby-progressbar", "~> 1.11"
   spec.add_dependency "sqlite3", "2.7.3"
   spec.add_dependency "terminal-table", "~> 4.0.0"
   spec.add_dependency "tty-prompt", "~> 0.23.1"
