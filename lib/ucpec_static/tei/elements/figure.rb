@@ -19,7 +19,23 @@ module UCPECStatic
         def render_html_content
           super
 
-          html_builder.img(src: entity) if entity
+          if entity
+            transformed_src = transform_image_src(entity)
+            html_builder.img(src: transformed_src)
+          end
+        end
+
+        private
+
+        # @param [String] original_src The original entity value from TEI
+        # @return [String] The transformed image source path
+        def transform_image_src(original_src)
+          base_url = "https://ucpec.s3.us-west-2.amazonaws.com/"
+          
+          # convert extension from .gif to .jpg
+          filename = original_src.gsub(".gif", ".jpg")
+          
+          "#{base_url}#{filename}"
         end
       end
     end
