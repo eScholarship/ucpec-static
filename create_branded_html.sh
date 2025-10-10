@@ -148,15 +148,14 @@ cat << EOF
       text-align: justify;
     }
     
-    blockquote {
-      border-left: 4px solid #3498db;
+    .blockquote p {
       padding-left: 2rem;
-      margin: 2rem 0;
-      font-style: italic;
-      color: #555;
-      background: #f8f9fa;
-      padding: 1.5rem 2rem;
-      border-radius: 0 4px 4px 0;
+      font-size: 0.9em;
+    }
+    
+    .blockquote::before,
+    .blockquote::after {
+      content: none;
     }
     
     figure {
@@ -182,6 +181,11 @@ cat << EOF
       border-radius: 0 8px 8px 0;
       font-size: 0.9rem;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    aside[data-type="note"] {
+      font-size: 0.9em;
+      background-color: #ccc;
     }
     
     .Heading-Heading2B {
@@ -260,8 +264,8 @@ cat << EOF
         <a href="#contact">Contact</a>
         <a href="#help">Help</a>
       </div>
-      <p>&copy; 2024 $BRAND_NAME. All rights reserved.</p>
-      <p>Powered by UCPEC Static • TEI XML to HTML Converter</p>
+      <p>&copy; 2025 $BRAND_NAME. All rights reserved.</p>
+      <p>Powered by California Digital Library • TEI XML to HTML Converter</p>
     </div>
   </footer>
 </body>

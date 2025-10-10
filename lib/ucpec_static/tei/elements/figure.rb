@@ -32,10 +32,8 @@ module UCPECStatic
         def transform_image_src(original_src)
           base_url = "https://ucpec.s3.us-west-2.amazonaws.com/"
           
-          # convert extension from .gif to .jpg
-          filename = original_src.gsub(".gif", ".jpg")
           
-          "#{base_url}#{filename}"
+          "#{base_url}#{original_src}"
         end
       end
     end
