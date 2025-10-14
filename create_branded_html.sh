@@ -68,6 +68,11 @@ cat << EOF
       margin-top: 0.25rem;
     }
     
+    [data-tei-tag="docImprint"] {
+      display: flex;
+      flex-direction: column;
+    }
+    
     .main-nav ul {
       list-style: none;
       display: flex;
@@ -148,7 +153,8 @@ cat << EOF
       text-align: justify;
     }
     
-    .blockquote p {
+    .blockquote p,
+    blockquote[data-tei-tag="epigraph"] {
       padding-left: 2rem;
       font-size: 0.9em;
     }
@@ -200,6 +206,15 @@ cat << EOF
     
     .Heading-Heading4 {
       color: #9b59b6;
+    }
+    
+    .chapter-link {
+      color: inherit;
+      text-decoration: none;
+    }
+    
+    .chapter-link:hover {
+      text-decoration: underline;
     }
     
     /* Responsive design */
