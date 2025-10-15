@@ -44,6 +44,10 @@ end
 loader.eager_load
 
 # Must happen _after_ eager-loading.
+UCPECStatic::Application.register("config", memoize: true) do
+  UCPECStatic::Config.new
+end
+
 UCPECStatic::Application.register("tei.matchable_node_klasses", memoize: true) do
   UCPECStatic::TEI::Nodes::Abstract.matchable_node_klasses
 end

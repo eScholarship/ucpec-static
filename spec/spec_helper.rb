@@ -13,7 +13,7 @@ SimpleCov.start do
 
   add_filter "lib/boot"
   add_filter "lib/ucpec_static/support"
-  add_filter "spec/support"
+  add_filter "spec"
 end
 
 require "ucpec_static"
