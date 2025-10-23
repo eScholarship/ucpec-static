@@ -15,3 +15,7 @@ Bootsnap.setup(
 )
 
 require_relative "gems"
+
+CONFIG_ROOT = Pathname.new(__dir__).join("../../config").realpath
+
+Anyway::Settings.default_config_path = CONFIG_ROOT

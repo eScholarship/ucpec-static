@@ -13,6 +13,7 @@ module UCPECStatic
         extend ActiveModel::Callbacks
         extend Dry::Core::ClassAttributes
 
+        include UCPECStatic::HasConfig
         include Dry::Core::Constants
         include Dry::Core::Equalizer.new(:node_id)
         include Dry::Core::Memoizable
@@ -173,9 +174,7 @@ module UCPECStatic
         # @!group Hook Wrappers
 
         def render_html!
-          run_callbacks :html_rendering do
-            render_html
-          end
+          render_html
         end
 
         # @return [void]
