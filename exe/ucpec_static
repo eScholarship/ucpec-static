@@ -6,7 +6,7 @@ begin
 rescue LoadError
   # In development
   require "bundler/setup"
-  require "pry"
+  # require "pry"
   require "ucpec_static"
 end
 
