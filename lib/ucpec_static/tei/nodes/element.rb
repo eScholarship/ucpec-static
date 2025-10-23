@@ -118,7 +118,9 @@ module UCPECStatic
               when :html_class
                 html_classes << attr_value
               when :skip
+                # :nocov:
                 next
+                # :nocov:
               when Proc
                 instance_exec(attr_value, &handler)
               end

@@ -19,7 +19,9 @@ module UCPECStatic
         def close
           bar.try(:finish)
 
+          # :nocov:
           super if defined?(super)
+          # :nocov:
         end
 
         private
