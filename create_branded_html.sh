@@ -44,8 +44,8 @@ cat << EOF
     }
     
     .site-header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+      background: #62708d;
+      color: #fff;
       padding: 1.5rem 0;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
@@ -57,15 +57,18 @@ cat << EOF
     }
     
     .brand {
+      color: #fff;
       font-size: 2rem;
       font-weight: bold;
       text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      border-bottom: none;
+      padding: 0;
     }
     
     .tagline {
       font-size: 0.9rem;
       opacity: 0.9;
-      margin-top: 0.25rem;
+      font-style: italic;
     }
     
     [data-tei-tag="docImprint"] {
@@ -129,23 +132,21 @@ cat << EOF
     /* TEI-specific styles */
     h1, h2, h3, h4, h5, h6 {
       margin: 2rem 0 1rem 0;
-      color: #2c3e50;
+      color: #333;
     }
     
     h1 {
       font-size: 2.5rem;
-      border-bottom: 3px solid #e74c3c;
+      border-bottom: 3px solid #ddd;
       padding-bottom: 1rem;
     }
     
     h2 {
       font-size: 2rem;
-      color: #3498db;
     }
     
     h3 {
       font-size: 1.5rem;
-      color: #9b59b6;
     }
     
     p {
@@ -195,17 +196,17 @@ cat << EOF
     }
     
     .Heading-Heading2B {
-      color: #e74c3c;
-      border-bottom: 2px solid #e74c3c;
+      color: #333;
+      border-bottom: 2px solid #ddd;
       padding-bottom: 0.5rem;
     }
     
     .Heading-Heading3 {
-      color: #3498db;
+      color: #333;
     }
     
     .Heading-Heading4 {
-      color: #9b59b6;
+      color: #333;
     }
     
     .chapter-link {
@@ -215,6 +216,129 @@ cat << EOF
     
     .chapter-link:hover {
       text-decoration: underline;
+    }
+    
+    /* Footnotes and References Styling */
+    footer.footnotes {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 3px solid;
+      background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+    }
+    
+    footer.footnotes ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    footer.footnotes li {
+      margin: 1.5rem 0;
+    }
+    
+    footer.footnotes > ul > li > aside {
+      background: white;
+      border-left: 4px solid;
+      padding: 1.25rem;
+      border-radius: 0 6px 6px 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+    }
+    
+    footer.footnotes > ul > li > aside:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transform: translateX(4px);
+    }
+    
+    footer.footnotes aside p {
+      margin: 0.5rem 0;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    
+    /* Reset nested asides to not have the border */
+    footer.footnotes aside aside {
+      border-left: none;
+      padding: 0;
+      box-shadow: none;
+      background: transparent;
+    }
+    
+    /* Footnote navigation (anchor and backlink) */
+    .footnote--nav {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    /* Hide backlinks in nested asides since they point to the same footnote */
+    footer.footnotes aside aside .footnote--nav {
+      display: none;
+    }
+    
+    .footnote--anchor {
+      flex-shrink: 0;
+    }
+    
+    .footnote--backlink {
+      color: #000;
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      background: #e6e6e6;
+      transition: all 0.2s ease;
+    }
+
+    .footnote--backlink:hover {
+      background: #000;
+      color: #fff;
+      transform: translateX(-2px);
+    }
+    
+    .footnote--backlink:active {
+      transform: translateX(-3px);
+    }
+    
+    /* Footnote reference links in text */
+    a[data-tei-tag="ref"][href^="#fnd"] {
+      color: #e74c3c;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.85em;
+      vertical-align: super;
+      padding: 0.1em 0.3em;
+      border-radius: 3px;
+      background: #fee;
+      transition: all 0.2s ease;
+    }
+    
+    a[data-tei-tag="ref"][href^="#fnd"]:hover {
+      background: #e74c3c;
+      color: white;
+      box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
+    }
+    
+    /* Scroll behavior for smooth jumping */
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    /* Highlight target when jumping to it */
+    aside:target {
+      animation: highlightFootnote 2s ease;
+    }
+    
+    @keyframes highlightFootnote {
+      0%, 100% {
+        background: white;
+      }
+      20% {
+        background: #fff3cd;
+      }
     }
     
     /* Responsive design */
@@ -252,7 +376,7 @@ cat << EOF
     <div class="container">
       <div>
         <h1 class="brand">$BRAND_NAME</h1>
-        <div class="tagline">Digital Humanities Publishing Platform</div>
+        <div class="tagline">formerly eScholarship Editions</div>
       </div>
       <nav class="main-nav">
         <ul>
@@ -280,7 +404,7 @@ cat << EOF
         <a href="#help">Help</a>
       </div>
       <p>&copy; 2025 $BRAND_NAME. All rights reserved.</p>
-      <p>Powered by California Digital Library • TEI XML to HTML Converter</p>
+      <p>Powered by California Digital Library</p>
     </div>
   </footer>
 </body>
