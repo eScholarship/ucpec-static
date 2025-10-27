@@ -9,13 +9,17 @@ module UCPECStatic
 
         uses_html_tag! "a"
 
+        on_xml_attribute!(:id) do |value|
+          @ref_id = value
+        end
+
         on_xml_attribute!(:target) do |value|
           @target = value
         end
 
         on_xml_attribute!(:type) do |value|
           @type = value
-          @for_footnote = value == "fnoteref"
+          @for_footnote = value.in?(%w[fnoteref noteref])
         end
 
         after_process_xml_attributes :prepare_footnote_attributes!, if: :valid_footnote?
@@ -24,6 +28,9 @@ module UCPECStatic
         attr_reader :for_footnote
 
         alias for_footnote? for_footnote
+
+        # @return [String, nil]
+        attr_reader :ref_id
 
         # @return [String, nil]
         attr_reader :target
@@ -43,8 +50,12 @@ module UCPECStatic
 
         # @return [void]
         def prepare_footnote_attributes!
-          @html_attributes[:name] = "#{target}-ref"
-          @html_attributes[:href] = "##{target}"
+          # For noteref/endnote: use ref's own id for the name (so backlink can find it)
+          # For fnoteref/footnote: use target for the name
+          anchor_name = ref_id.presence || target
+          
+          @html_attributes[:name] = "#{anchor_name}-ref"
+          @html_attributes[:href] = "##{anchor_name}"
         end
       end
     end

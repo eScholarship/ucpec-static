@@ -304,7 +304,7 @@ cat << EOF
     }
     
     /* Footnote reference links in text */
-    a[data-tei-tag="ref"][href^="#fnd"] {
+    a[data-tei-tag="ref"] {
       color: #e74c3c;
       text-decoration: none;
       font-weight: 600;
@@ -316,7 +316,7 @@ cat << EOF
       transition: all 0.2s ease;
     }
     
-    a[data-tei-tag="ref"][href^="#fnd"]:hover {
+    a[data-tei-tag="ref"]:hover {
       background: #e74c3c;
       color: white;
       box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
