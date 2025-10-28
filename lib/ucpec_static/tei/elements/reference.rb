@@ -19,7 +19,8 @@ module UCPECStatic
 
         on_xml_attribute!(:type) do |value|
           @type = value
-          @for_footnote = value.in?(%w[fnoteref noteref])
+          @for_footnote = value.in?(%w[fnoteref noteref secref])
+          @is_section_ref = value == "secref"
         end
 
         after_process_xml_attributes :prepare_footnote_attributes!, if: :valid_footnote?
@@ -28,6 +29,11 @@ module UCPECStatic
         attr_reader :for_footnote
 
         alias for_footnote? for_footnote
+
+        # @return [Boolean]
+        attr_reader :is_section_ref
+
+        alias is_section_ref? is_section_ref
 
         # @return [String, nil]
         attr_reader :ref_id
@@ -50,12 +56,17 @@ module UCPECStatic
 
         # @return [void]
         def prepare_footnote_attributes!
-          # For noteref/endnote: use ref's own id for the name (so backlink can find it)
-          # For fnoteref/footnote: use target for the name
-          anchor_name = ref_id.presence || target
-          
-          @html_attributes[:name] = "#{anchor_name}-ref"
-          @html_attributes[:href] = "##{anchor_name}"
+          # For secref: just link to the target section (e.g., "endnotes"), no backlink anchor needed
+          if is_section_ref?
+            @html_attributes[:href] = "##{target}"
+          else
+            # For noteref/endnote: use ref's own id for the name (so backlink can find it)
+            # For fnoteref/footnote: use target for the name
+            anchor_name = ref_id.presence || target
+            
+            @html_attributes[:name] = "#{anchor_name}-ref"
+            @html_attributes[:href] = "##{target}"
+          end
         end
       end
     end

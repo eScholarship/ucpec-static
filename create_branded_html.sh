@@ -189,11 +189,6 @@ cat << EOF
       font-size: 0.9rem;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-
-    aside[data-type="note"] {
-      font-size: 0.9em;
-      background-color: #ccc;
-    }
     
     .Heading-Heading2B {
       color: #333;
@@ -304,7 +299,7 @@ cat << EOF
     }
     
     /* Footnote reference links in text */
-    a[data-tei-tag="ref"] {
+    section[data-tei-tag="body"] a[data-tei-tag="ref"] {
       color: #e74c3c;
       text-decoration: none;
       font-weight: 600;
@@ -316,7 +311,7 @@ cat << EOF
       transition: all 0.2s ease;
     }
     
-    a[data-tei-tag="ref"]:hover {
+    section[data-tei-tag="body"] a[data-tei-tag="ref"]:hover {
       background: #e74c3c;
       color: white;
       box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);

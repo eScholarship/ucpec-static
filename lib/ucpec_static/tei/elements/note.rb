@@ -15,8 +15,9 @@ module UCPECStatic
 
         on_xml_attribute!(:type) do |value|
           @type = value
-          # Capture both footnotes and endnotes to move them to the footer
-          @counts_as_footnote = value.in?(%w[footnote endnote])
+          # Only capture inline footnotes, or endnotes with corresp (noteref-style)
+          # Endnotes without corresp (secref-style) render in place
+          @counts_as_footnote = value == "footnote"
           @is_endnote = value == "endnote"
         end
 
@@ -42,9 +43,20 @@ module UCPECStatic
 
         alias is_endnote? is_endnote
 
-        # Should add anchor for both footnotes and endnotes
+        # Capture noteref-style endnotes (with corresp) but not secref-style (without corresp)
+        def counts_as_footnote?
+          super || (is_endnote? && corresp.present?)
+        end
+
+        # Should add anchor/backlink for notes that will be captured (have backlink target)
+        # Secref-style endnotes (without corresp) render in place without backlinks
         def should_add_anchor?
-          counts_as_footnote? || is_endnote?
+          counts_as_footnote? && has_backlink_target?
+        end
+
+        # Check if this note has a backlink target (corresp for endnotes, or is a footnote)
+        def has_backlink_target?
+          corresp.present? || type == "footnote"
         end
 
         private
@@ -55,8 +67,8 @@ module UCPECStatic
           return if target.blank?
           # :nocov:
 
-          # For noteref/endnote: corresp points to the ref's id, so we use that for the backlink
-          # For fnoteref/footnote: no corresp, so we use target for the backlink
+          # For noteref/endnote with corresp: corresp points to the ref's id
+          # For fnoteref/footnote: use target (same as note's id)
           ref_id = corresp.presence || target
 
           html_builder.nav(class: "footnote--nav") do
