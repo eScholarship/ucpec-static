@@ -28,6 +28,7 @@ PATH
       nokogiri (~> 1.18.9)
       paint (~> 2.3.0)
       pathname (>= 0.4)
+      ruby-progressbar (~> 1.11)
       sqlite3 (= 2.7.3)
       terminal-table (~> 4.0.0)
       tty-prompt (~> 0.23.1)
