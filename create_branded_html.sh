@@ -70,10 +70,32 @@ cat << EOF
       opacity: 0.9;
       font-style: italic;
     }
-    
+
+    [data-tei-tag="front"] {
+      display: flex;
+      align-items: center;
+      gap: 3em;
+      background: #f5f5f5;
+      border-radius: 5px;
+      padding: 1em;
+    }
+
     [data-tei-tag="docImprint"] {
       display: flex;
       flex-direction: column;
+    }
+
+    /* Book cover styles */
+    .book-cover {
+      text-align: center;
+      margin: 2rem 0;
+    }
+    
+    .book-cover img {
+      max-width: 300px;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
     
     .main-nav ul {
@@ -189,7 +211,7 @@ cat << EOF
       font-size: 0.9rem;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    
+
     .Heading-Heading2B {
       color: #333;
       border-bottom: 2px solid #ddd;
@@ -341,6 +363,10 @@ cat << EOF
       .site-header .container {
         flex-direction: column;
         gap: 1rem;
+      }
+
+      [data-tei-tag="titlePage"] h1 {
+        font-size: 1.5rem;
       }
       
       .main-nav ul {

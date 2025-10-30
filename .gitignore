@@ -16,3 +16,5 @@
 *.sqlite3-journal
 
 .DS_Store
+
+converted_html/
