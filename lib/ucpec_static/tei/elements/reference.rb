@@ -57,16 +57,14 @@ module UCPECStatic
         # @return [void]
         def prepare_footnote_attributes!
           # For secref: just link to the target section (e.g., "endnotes"), no backlink anchor needed
-          if is_section_ref?
-            @html_attributes[:href] = "##{target}"
-          else
+          unless is_section_ref?
             # For noteref/endnote: use ref's own id for the name (so backlink can find it)
             # For fnoteref/footnote: use target for the name
             anchor_name = ref_id.presence || target
-            
+
             @html_attributes[:name] = "#{anchor_name}-ref"
-            @html_attributes[:href] = "##{target}"
           end
+          @html_attributes[:href] = "##{target}"
         end
       end
     end

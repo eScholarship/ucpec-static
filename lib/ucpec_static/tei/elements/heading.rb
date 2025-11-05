@@ -24,7 +24,7 @@ module UCPECStatic
           # For chapter headings, wrap content in a self-referencing anchor
           chapter_div = closest_chapter_division
           chapter_id = chapter_div&.node&.[]("id")
-          
+
           if chapter_id.present?
             wrap_with_tag!(html_tag, **compiled_html_attributes) do
               wrap_with_tag!("a", href: "##{chapter_id}", class: "chapter-link") do
@@ -44,7 +44,7 @@ module UCPECStatic
 
         def closest_chapter_division
           # Only make the direct child heading of a chapter division clickable, not sub-headings
-          parent if parent&.kind_of?(Elements::Division) && parent&.xml_attributes&.[]("type") == "chapter"
+          parent if parent.kind_of?(Elements::Division) && parent&.xml_attributes&.[]("type") == "chapter"
         end
       end
     end

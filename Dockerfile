@@ -1,16 +1,17 @@
-# Use an official Ruby image as the base
+# Production Dockerfile - excludes test/development gems for smaller image
+# For CI/testing, use Dockerfile.ci instead
 FROM ruby:3.4.6-alpine3.22
 
 # Set the working directory inside the container
 WORKDIR /app
 
 RUN     apk update && \ 
-        apk add --no-cache git alpine-sdk
+        apk add --no-cache git alpine-sdk yaml-dev libffi-dev sqlite-dev
 
 # Copy the app exwecpt 
 COPY . . 
 
-# Install Ruby gems
+# Install Ruby gems (production only)
 RUN bundle install --without development test
 
 # Set the entry point to run your Ruby script

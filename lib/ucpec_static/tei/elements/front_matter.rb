@@ -15,10 +15,10 @@ module UCPECStatic
 
           run_callbacks :render_children do
             render_book_cover!
-            
+
             children.each do |child|
               next unless child.kind_of?(TitlePage)
-              
+
               child.to_html
             end
           end
