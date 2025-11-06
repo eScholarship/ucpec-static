@@ -1,0 +1,21 @@
+# CI/Development Dockerfile - includes test and development gems
+FROM ruby:3.4.6-alpine3.22
+
+WORKDIR /app
+
+# Install all necessary build dependencies for native extensions
+RUN apk update && \ 
+    apk add --no-cache git alpine-sdk yaml-dev libffi-dev sqlite-dev
+
+# Copy dependency files first for better layer caching
+COPY Gemfile Gemfile.lock ucpec_static.gemspec ./
+COPY lib/ucpec_static/version.rb ./lib/ucpec_static/version.rb
+
+# Install ALL gems including development and test
+RUN bundle install
+
+# Copy the rest of the application
+COPY . .
+
+CMD ["/bin/sh"]
+
