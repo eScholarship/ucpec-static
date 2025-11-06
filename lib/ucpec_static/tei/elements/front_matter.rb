@@ -47,8 +47,7 @@ module UCPECStatic
 
         # @return [String, nil]
         def tei_root_file_id
-          root_element = closest { _1.kind_of?(Root) }
-          root_element&.xml_attributes&.[]("id")
+          parsed&.tei_root_id
         end
       end
     end
