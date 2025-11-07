@@ -200,12 +200,12 @@ aside[data-type="footnote"] {
   color: #333;
 }
 
-.chapter-link {
+.heading-link {
   color: inherit;
   text-decoration: none;
 }
 
-.chapter-link:hover {
+.heading-link:hover {
   text-decoration: underline;
 }
 
