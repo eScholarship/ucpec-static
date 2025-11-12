@@ -25,7 +25,7 @@ module UCPECStatic
         on_xml_attribute!(:corresp) do |value|
           @corresp = value
         end
-        
+
         after_process_xml_attributes :set_counts_as_footnote!
         after_process_xml_attributes :add_acknowledgement_class!
 
@@ -50,12 +50,9 @@ module UCPECStatic
 
         # Capture inline notes that are actually referenced
         # Endnotes always render in place (never captured)
-        def counts_as_footnote?
-          super
-        end
-        
+
         private
-        
+
         # Set counts_as_footnote based on type and corresp
         # Capture footnotes that should be moved to the bottom
         def set_counts_as_footnote!
@@ -71,8 +68,8 @@ module UCPECStatic
             @counts_as_footnote = false
           end
         end
-        
-        # Add a CSS class for acknowledgement notes (unreferenced notes) 
+
+        # Add a CSS class for acknowledgement notes (unreferenced notes)
         def add_acknowledgement_class!
           if type == "note" && corresp.blank?
             html_classes << "acknowledgement-note"
@@ -90,8 +87,6 @@ module UCPECStatic
           corresp.present? || (counts_as_footnote? && target.present?)
         end
 
-        private
-
         # @return [void]
         def add_anchor!
           # :nocov:
@@ -100,7 +95,7 @@ module UCPECStatic
 
           html_builder.nav(class: "footnote--nav") do
             html_builder.a(nil, name: target, class: "footnote--anchor")
-            
+
             # Only add backlink if corresp exists (bidirectional linking)
             if has_backlink?
               ref_id = corresp.presence || target
