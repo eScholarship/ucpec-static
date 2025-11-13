@@ -17,6 +17,11 @@ fi
 # Create output directory if it doesn't exist
 mkdir -p "$OUTPUT_DIR"
 
+# Copy CSS file to output directory (for uploading)
+if [ -f "templates/styles.css" ]; then
+    cp templates/styles.css "$OUTPUT_DIR/styles.css"
+fi
+
 count=0
 total=$(find "$INPUT_DIR" -name "*.xml" | wc -l)
 

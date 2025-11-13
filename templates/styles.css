@@ -226,28 +226,35 @@ footer.footnotes li {
   margin: 1.5rem 0;
 }
 
-footer.footnotes > ul > li > aside {
+/* Shared styles for all notes (in footer and in-place) */
+footer.footnotes > ul > li > aside,
+aside[data-tei-tag="note"] {
   background: white;
   border-left: 4px solid;
   padding: 1.25rem;
   border-radius: 0 6px 6px 0;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   transition: all 0.3s ease;
+  margin: 1.5rem 0;
 }
 
-footer.footnotes > ul > li > aside:hover {
+
+footer.footnotes > ul > li > aside:hover,
+aside[data-tei-tag="note"]:hover {
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   transform: translateX(4px);
 }
 
-footer.footnotes aside p {
+footer.footnotes aside p,
+aside[data-tei-tag="note"] p {
   margin: 0.5rem 0;
   font-size: 0.95rem;
   line-height: 1.7;
 }
 
 /* Reset nested asides to not have the border */
-footer.footnotes aside aside {
+footer.footnotes aside aside,
+aside[data-tei-tag="note"] aside {
   border-left: none;
   padding: 0;
   box-shadow: none;
@@ -265,7 +272,8 @@ footer.footnotes aside aside {
 }
 
 /* Hide backlinks in nested asides since they point to the same footnote */
-footer.footnotes aside aside .footnote--nav {
+footer.footnotes aside aside .footnote--nav,
+aside[data-tei-tag="note"] aside .footnote--nav {
   display: none;
 }
 
@@ -292,6 +300,21 @@ footer.footnotes aside aside .footnote--nav {
 
 .footnote--backlink:active {
   transform: translateX(-3px);
+}
+
+/* Special styling for acknowledgement notes */
+aside.acknowledgement-note {
+  background: #f8f9fa;
+  border-left-color: #000;
+  font-style: italic;
+}
+
+aside.acknowledgement-note nav {
+  border-bottom: none;
+}
+
+aside.acknowledgement-note p {
+  font-size: 0.9rem;
 }
 
 /* Footnote reference links in text */
