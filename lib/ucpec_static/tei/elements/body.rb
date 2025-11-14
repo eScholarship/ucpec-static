@@ -5,7 +5,7 @@ module UCPECStatic
     module Elements
       class Body < UCPECStatic::TEI::Nodes::Element
         before_prepare_html :collect_chapters!
-        
+
         around_render_children :render_with_toc!
 
         matches_tei_tag! "body"
@@ -26,22 +26,22 @@ module UCPECStatic
         # @return [void]
         def collect_chapters!
           @chapters = []
-          
+
           # Traverse all descendants to find any division element with type="chapter"
           traverse do |node|
             next unless node.kind_of?(Elements::Division)
             next unless node.xml_attributes["type"] == "chapter"
-            
+
             chapter_id = node.xml_attributes["id"]
             next if chapter_id.blank?
-            
+
             # Find the heading within this chapter
             heading = node.find_first_descendant { |child| child.kind_of?(Elements::Heading) }
             next unless heading
-            
+
             # Extract the heading text
             heading_text = extract_heading_text(heading)
-            
+
             @chapters << {
               id: chapter_id,
               title: heading_text,
@@ -71,7 +71,7 @@ module UCPECStatic
             wrap_with_tag!("h1", class: "toc-title") do
               html_builder.text "Table of Contents"
             end
-            
+
             wrap_with_tag!("ol", class: "toc-list") do
               chapters.each do |chapter|
                 wrap_with_tag!("li", class: "toc-item") do
