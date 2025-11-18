@@ -336,6 +336,29 @@ section[data-tei-tag="body"] a[data-tei-tag="ref"]:hover {
   box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
 }
 
+/* Table of Contents Styling */
+.table-of-contents {
+  margin: 2rem 0 3rem 0;
+}
+
+.toc-item {
+  margin: 0.75rem 1rem 0;
+  font-weight: bold;
+}
+
+.toc-link {
+  color: unset;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+}
+
+.toc-link:hover {
+  transform: translateX(5px);
+  text-decoration: underline;
+}
+
 /* Scroll behavior for smooth jumping */
 html {
   scroll-behavior: smooth;
