@@ -7,8 +7,27 @@ module UCPECStatic
       class PageBreak < UCPECStatic::TEI::Nodes::Element
         matches_tei_tag! "pb"
 
-        # Page breaks have no HTML equivalent
-        skip_rendering!
+        on_xml_attribute!("n") do |value|
+          @page_number = value
+        end
+
+        # The value of the @n attribute (page number), if present
+        # @return [String, nil]
+        attr_reader :page_number
+
+        def render_html
+          if page_number.present?
+            html_builder.div(class: "page-break-container") do
+              html_builder.div(class: "page-number") do
+                html_builder.text "#{page_number}"
+              end
+              html_builder.hr(**compiled_html_attributes)
+            end
+          else
+            # Fallback to just hr if no page number
+            html_builder.hr(**compiled_html_attributes)
+          end
+        end
       end
     end
   end

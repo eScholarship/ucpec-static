@@ -146,8 +146,32 @@ h3 {
 }
 
 p {
-  margin: 1.5rem 0;
-  text-align: justify;
+  text-indent: 2em;
+}
+
+/* Page break styling */
+.page-break-container {
+  margin: 3rem 0;
+  text-align: center;
+}
+
+.page-number {
+  color: #ccc;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.page-break-container hr {
+  border: none;
+  border-top: 2px solid #dee2e6;
+  margin: 0 auto;
+  width: 50%;
+}
+
+/* Reset text indent for paragraphs after a page break */
+hr + p,
+.page-break-container + p {
+  text-indent: 0;
 }
 
 .blockquote p,
@@ -348,7 +372,6 @@ section[data-tei-tag="body"] a[data-tei-tag="ref"]:hover {
 
 .toc-link {
   color: unset;
-  text-decoration: none;
   transition: all 0.3s ease;
   display: inline-block;
   padding: 0.25rem 0.5rem;
@@ -356,7 +379,6 @@ section[data-tei-tag="body"] a[data-tei-tag="ref"]:hover {
 
 .toc-link:hover {
   transform: translateX(5px);
-  text-decoration: underline;
 }
 
 /* Scroll behavior for smooth jumping */
