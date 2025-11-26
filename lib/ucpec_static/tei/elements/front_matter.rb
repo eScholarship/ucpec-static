@@ -9,16 +9,23 @@ module UCPECStatic
 
         uses_html_tag! "header"
 
-        # Only render titlePage children, skip everything else in front matter
-        def render_children!
-          return if skip_render_children?
+        # Book cover + title page in one div, rest outside
+        def render_html
+          wrap_with_tag!(html_tag) do
+            # Wrap book cover and title page together with front matter styling
+            wrap_with_tag!("div", **compiled_html_attributes) do
+              render_book_cover!
+              
+              # Render only TitlePage children
+              children.each do |child|
+                next unless child.kind_of?(TitlePage)
+                child.to_html
+              end
+            end
 
-          run_callbacks :render_children do
-            render_book_cover!
-
+            # Render all other (non-TitlePage) children outside the styled div
             children.each do |child|
-              next unless child.kind_of?(TitlePage)
-
+              next if child.kind_of?(TitlePage)
               child.to_html
             end
           end
