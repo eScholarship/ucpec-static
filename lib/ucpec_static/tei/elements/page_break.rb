@@ -21,7 +21,7 @@ module UCPECStatic
             attrs = compiled_html_attributes.merge(class: "page-break-container")
             html_builder.div(**attrs) do
               html_builder.div(class: "page-number") do
-                html_builder.text "#{page_number}"
+                html_builder.text page_number.to_s
               end
               html_builder.hr(**compiled_html_attributes)
             end

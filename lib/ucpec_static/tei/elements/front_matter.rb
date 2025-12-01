@@ -17,32 +17,10 @@ module UCPECStatic
         # Book cover + title page in one div, rest outside
         def render_html
           wrap_with_tag!(html_tag) do
-            # Wrap book cover and title page together with front matter styling
-            wrap_with_tag!("div", **compiled_html_attributes) do
-              render_book_cover!
-              
-              # Render only TitlePage children
-              children.each do |child|
-                next unless child.kind_of?(TitlePage)
-                child.to_html
-              end
-            end
-
-            # Render dedication elements
-            children.each do |child|
-              next unless child.kind_of?(Division) && child.xml_attributes["type"] == "dedication"
-              child.to_html
-            end
-
-            # Render table of contents after title page and dedication
+            render_title_section!
+            render_dedications!
             render_table_of_contents! if has_chapters?
-
-            # Render all other (non-TitlePage, non-dedication) children
-            children.each do |child|
-              next if child.kind_of?(TitlePage)
-              next if child.kind_of?(Division) && child.xml_attributes["type"] == "dedication"
-              child.to_html
-            end
+            render_other_front_matter!
           end
         end
 
@@ -52,6 +30,50 @@ module UCPECStatic
         end
 
         private
+
+        # Render book cover and title page in styled container
+        # @return [void]
+        def render_title_section!
+          wrap_with_tag!("div", **compiled_html_attributes) do
+            render_book_cover!
+            render_title_pages!
+          end
+        end
+
+        # Render title page children
+        # @return [void]
+        def render_title_pages!
+          children.each do |child|
+            next unless child.kind_of?(TitlePage)
+            child.to_html
+          end
+        end
+
+        # Render dedication elements
+        # @return [void]
+        def render_dedications!
+          children.each do |child|
+            next unless dedication?(child)
+            child.to_html
+          end
+        end
+
+        # Render all other front matter content
+        # @return [void]
+        def render_other_front_matter!
+          children.each do |child|
+            next if child.kind_of?(TitlePage)
+            next if dedication?(child)
+            child.to_html
+          end
+        end
+
+        # Check if a child is a dedication
+        # @param [UCPECStatic::TEI::Nodes::Abstract] child
+        # @return [Boolean]
+        def dedication?(child)
+          child.kind_of?(Division) && child.xml_attributes["type"] == "dedication"
+        end
 
         # Collect all chapters from the body element
         # @return [void]
