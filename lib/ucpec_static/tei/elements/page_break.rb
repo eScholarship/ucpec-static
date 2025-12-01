@@ -17,7 +17,9 @@ module UCPECStatic
 
         def render_html
           if page_number.present?
-            html_builder.div(class: "page-break-container") do
+            # Put the ID on the container so links jump to the page number label
+            attrs = compiled_html_attributes.merge(class: "page-break-container")
+            html_builder.div(**attrs) do
               html_builder.div(class: "page-number") do
                 html_builder.text "#{page_number}"
               end

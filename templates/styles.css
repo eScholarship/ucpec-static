@@ -377,6 +377,18 @@ section[data-tei-tag="body"] a[data-tei-tag="ref"]:hover {
   box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
 }
 
+/* Page and Figure reference links */
+a.page-ref, a.fig-ref {
+  color: #62708d;
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px dotted;
+}
+
+a.page-ref:hover, a.fig-ref:hover {
+  border-bottom-style: solid;
+}
+
 /* Table of Contents Styling */
 .table-of-contents {
   margin: 2rem 0 3rem 0;
