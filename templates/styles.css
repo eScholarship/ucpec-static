@@ -307,9 +307,9 @@ aside[data-tei-tag="note"] aside {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid #e9ecef;
+  margin-top: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #e9ecef;
 }
 
 /* Hide backlinks in nested asides since they point to the same footnote */
