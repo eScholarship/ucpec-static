@@ -164,6 +164,7 @@ h6 {
 
 p {
   text-indent: 2em;
+  margin: 0.5em 0 0.5em 0;
 }
 
 /* Page break styling */
@@ -195,6 +196,7 @@ hr + p,
 blockquote[data-tei-tag="epigraph"] {
   padding-left: 2rem;
   font-size: 0.9em;
+  text-indent: 0;
 }
 
 .blockquote::before,
