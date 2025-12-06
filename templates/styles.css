@@ -72,6 +72,11 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
+[data-type="dedication"] p {
+  text-indent: 0;
+  margin: 1em;
+}
+
 .main-nav ul {
   list-style: none;
   display: flex;
@@ -145,15 +150,53 @@ h3 {
   font-size: 1.5rem;
 }
 
+h4 {
+  font-size: 1.25rem;
+}
+
+h5 {
+  font-size: 1.125rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
 p {
-  margin: 1.5rem 0;
-  text-align: justify;
+  text-indent: 2em;
+  margin: 0.5em 0 0.5em 0;
+}
+
+/* Page break styling */
+.page-break-container {
+  margin: 3rem 0;
+  text-align: center;
+}
+
+.page-number {
+  color: #ccc;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.page-break-container hr {
+  border: none;
+  border-top: 2px solid #dee2e6;
+  margin: 0 auto;
+  width: 50%;
+}
+
+/* Reset text indent for paragraphs after a page break */
+hr + p,
+.page-break-container + p {
+  text-indent: 0;
 }
 
 .blockquote p,
 blockquote[data-tei-tag="epigraph"] {
   padding-left: 2rem;
   font-size: 0.9em;
+  text-indent: 0;
 }
 
 .blockquote::before,
@@ -266,9 +309,9 @@ aside[data-tei-tag="note"] aside {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid #e9ecef;
+  margin-top: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #e9ecef;
 }
 
 /* Hide backlinks in nested asides since they point to the same footnote */
@@ -336,6 +379,18 @@ section[data-tei-tag="body"] a[data-tei-tag="ref"]:hover {
   box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
 }
 
+/* Page and Figure reference links */
+a.page-ref, a.fig-ref {
+  color: #62708d;
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px dotted;
+}
+
+a.page-ref:hover, a.fig-ref:hover {
+  border-bottom-style: solid;
+}
+
 /* Table of Contents Styling */
 .table-of-contents {
   margin: 2rem 0 3rem 0;
@@ -348,7 +403,6 @@ section[data-tei-tag="body"] a[data-tei-tag="ref"]:hover {
 
 .toc-link {
   color: unset;
-  text-decoration: none;
   transition: all 0.3s ease;
   display: inline-block;
   padding: 0.25rem 0.5rem;
@@ -356,7 +410,6 @@ section[data-tei-tag="body"] a[data-tei-tag="ref"]:hover {
 
 .toc-link:hover {
   transform: translateX(5px);
-  text-decoration: underline;
 }
 
 /* Scroll behavior for smooth jumping */

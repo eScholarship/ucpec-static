@@ -7,7 +7,7 @@ module UCPECStatic
       class Note < UCPECStatic::TEI::Nodes::Element
         include UCPECStatic::TEI::Nodes::CapturedInFootnotes
 
-        before_render_children :add_anchor!, if: :should_add_anchor?
+        after_render_children :add_anchor!, if: :should_add_anchor?
 
         matches_tei_tag! "note"
 

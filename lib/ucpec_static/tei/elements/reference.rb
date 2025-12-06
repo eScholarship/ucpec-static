@@ -21,9 +21,13 @@ module UCPECStatic
           @type = value
           @for_footnote = value.in?(%w[fnoteref noteref secref])
           @is_section_ref = value == "secref"
+          @is_page_ref = value == "pageref"
+          @is_fig_ref = value == "figref"
         end
 
         after_process_xml_attributes :prepare_footnote_attributes!, if: :valid_footnote?
+        after_process_xml_attributes :prepare_page_ref_attributes!, if: :valid_page_ref?
+        after_process_xml_attributes :prepare_fig_ref_attributes!, if: :valid_fig_ref?
 
         # @return [Boolean]
         attr_reader :for_footnote
@@ -34,6 +38,16 @@ module UCPECStatic
         attr_reader :is_section_ref
 
         alias is_section_ref? is_section_ref
+
+        # @return [Boolean]
+        attr_reader :is_page_ref
+
+        alias is_page_ref? is_page_ref
+
+        # @return [Boolean]
+        attr_reader :is_fig_ref
+
+        alias is_fig_ref? is_fig_ref
 
         # @return [String, nil]
         attr_reader :ref_id
@@ -52,6 +66,14 @@ module UCPECStatic
           for_footnote? && target?
         end
 
+        def valid_page_ref?
+          is_page_ref? && target?
+        end
+
+        def valid_fig_ref?
+          is_fig_ref? && target?
+        end
+
         private
 
         # @return [void]
@@ -65,6 +87,18 @@ module UCPECStatic
             @html_attributes[:name] = "#{anchor_name}-ref"
           end
           @html_attributes[:href] = "##{target}"
+        end
+
+        # @return [void]
+        def prepare_page_ref_attributes!
+          @html_attributes[:href] = "##{target}"
+          @html_classes << "page-ref"
+        end
+
+        # @return [void]
+        def prepare_fig_ref_attributes!
+          @html_attributes[:href] = "##{target}"
+          @html_classes << "fig-ref"
         end
       end
     end
