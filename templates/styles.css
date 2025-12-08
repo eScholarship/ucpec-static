@@ -167,6 +167,26 @@ p {
   margin: 0.5em 0 0.5em 0;
 }
 
+table {
+  border-collapse: collapse;
+  max-width: 100%;
+}
+
+table p {
+  text-indent: 0;
+}
+
+tr p {
+  text-align: center;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+
 /* Page break styling */
 .page-break-container {
   margin: 3rem 0;
