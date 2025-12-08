@@ -237,6 +237,10 @@ figure img {
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
+.caption {
+  text-align: center;
+}
+
 aside[data-type="footnote"] {
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   border-left: 4px solid #6c757d;
