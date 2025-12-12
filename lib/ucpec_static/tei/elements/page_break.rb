@@ -20,10 +20,10 @@ module UCPECStatic
             # Put the ID on the container so links jump to the page number label
             attrs = compiled_html_attributes.merge(class: "page-break-container")
             html_builder.div(**attrs) do
+              html_builder.hr(**compiled_html_attributes)
               html_builder.div(class: "page-number") do
                 html_builder.text page_number.to_s
               end
-              html_builder.hr(**compiled_html_attributes)
             end
           else
             # Fallback to just hr if no page number

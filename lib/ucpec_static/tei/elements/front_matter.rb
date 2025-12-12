@@ -148,12 +148,12 @@ module UCPECStatic
         # Render the table of contents navigation
         # @return [void]
         def render_table_of_contents!
-          wrap_with_tag!("nav", class: "table-of-contents") do
-            wrap_with_tag!("h2", class: "toc-title") do
+          wrap_with_tag!("details", class: "table-of-contents") do
+            wrap_with_tag!("summary", class: "toc-title") do
               html_builder.text "Table of Contents"
             end
 
-            wrap_with_tag!("ol", class: "toc-list") do
+            wrap_with_tag!("ul", class: "toc-list") do
               chapters.each do |chapter|
                 wrap_with_tag!("li", class: "toc-item") do
                   wrap_with_tag!("a", href: "##{chapter[:id]}", class: "toc-link") do

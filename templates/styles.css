@@ -138,7 +138,7 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   font-size: 2.5rem;
-  border-bottom: 3px solid #ddd;
+  border-bottom: 3px solid;
   padding-bottom: 1rem;
 }
 
@@ -169,7 +169,10 @@ p {
 
 table {
   border-collapse: collapse;
+  width: 100%;
   max-width: 100%;
+  display: table;
+  table-layout: auto;
 }
 
 table p {
@@ -183,25 +186,28 @@ tr p {
 th, td {
   border: 1px solid #ddd;
   padding: 8px;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 /* Page break styling */
 .page-break-container {
   margin: 3rem 0;
-  text-align: center;
+  text-align: right;
 }
 
 .page-number {
   color: #ccc;
   font-weight: bold;
   margin-bottom: 0.5rem;
+  padding: 1.5rem 1.5rem 0 0;
 }
 
 .page-break-container hr {
   border: none;
   border-top: 2px solid #dee2e6;
   margin: 0 auto;
-  width: 50%;
 }
 
 /* Reset text indent for paragraphs after a page break */
@@ -253,7 +259,7 @@ aside[data-type="footnote"] {
 
 .Heading-Heading2B {
   color: #333;
-  border-bottom: 2px solid #ddd;
+  border-bottom: 2px solid;
   padding-bottom: 0.5rem;
 }
 
@@ -305,7 +311,7 @@ aside[data-tei-tag="note"] {
 
 
 footer.footnotes > ul > li > aside:hover,
-aside[data-tei-tag="note"]:hover {
+aside[data-tei-tag="note"]:not(.acknowledgement-note):hover {
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   transform: translateX(4px);
 }
@@ -375,7 +381,7 @@ aside.acknowledgement-note {
 }
 
 aside.acknowledgement-note nav {
-  border-bottom: none;
+  display: none;
 }
 
 aside.acknowledgement-note p {
@@ -415,11 +421,25 @@ a.page-ref:hover, a.fig-ref:hover {
 
 /* Table of Contents Styling */
 .table-of-contents {
+  background: #f5f5f5;
+  border-radius: 5px;
+  padding: 1.5rem;
   margin: 2rem 0 3rem 0;
 }
 
+.table-of-contents[open] {
+  padding-bottom: 2rem;
+}
+
+.toc-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+}
+
 .toc-item {
-  margin: 0.75rem 1rem 0;
+  margin: 1rem 1rem 0;
   font-weight: bold;
 }
 
@@ -483,6 +503,24 @@ aside:target {
   
   h2 {
     font-size: 1.5rem;
+  }
+
+  .toc-title {
+    font-size: 1.5rem;
+  }
+
+  /* Responsive table handling */
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+  }
+  
+  th, td {
+    padding: 6px;
+    font-size: 0.9rem;
+    min-width: 80px;
   }
 }
 
