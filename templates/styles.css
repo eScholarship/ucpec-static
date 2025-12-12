@@ -72,6 +72,11 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
+[data-type="dedication"] p {
+  text-indent: 0;
+  margin: 1em;
+}
+
 .main-nav ul {
   list-style: none;
   display: flex;
@@ -133,7 +138,7 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   font-size: 2.5rem;
-  border-bottom: 3px solid #ddd;
+  border-bottom: 3px solid;
   padding-bottom: 1rem;
 }
 
@@ -145,15 +150,77 @@ h3 {
   font-size: 1.5rem;
 }
 
+h4 {
+  font-size: 1.25rem;
+}
+
+h5 {
+  font-size: 1.125rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
 p {
-  margin: 1.5rem 0;
-  text-align: justify;
+  text-indent: 2em;
+  margin: 0.5em 0 0.5em 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 100%;
+  display: table;
+  table-layout: auto;
+}
+
+table p {
+  text-indent: 0;
+}
+
+tr p {
+  text-align: center;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Page break styling */
+.page-break-container {
+  margin: 3rem 0;
+  text-align: right;
+}
+
+.page-number {
+  color: #666;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  padding: 1.5rem 1.5rem 0 0;
+}
+
+.page-break-container hr {
+  border: none;
+  border-top: 2px solid #dee2e6;
+  margin: 0 auto;
+}
+
+/* Reset text indent for paragraphs after a page break */
+hr + p,
+.page-break-container + p {
+  text-indent: 0;
 }
 
 .blockquote p,
 blockquote[data-tei-tag="epigraph"] {
   padding-left: 2rem;
   font-size: 0.9em;
+  text-indent: 0;
 }
 
 .blockquote::before,
@@ -176,6 +243,10 @@ figure img {
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
+.caption {
+  text-align: center;
+}
+
 aside[data-type="footnote"] {
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   border-left: 4px solid #6c757d;
@@ -188,7 +259,7 @@ aside[data-type="footnote"] {
 
 .Heading-Heading2B {
   color: #333;
-  border-bottom: 2px solid #ddd;
+  border-bottom: 2px solid;
   padding-bottom: 0.5rem;
 }
 
@@ -240,7 +311,7 @@ aside[data-tei-tag="note"] {
 
 
 footer.footnotes > ul > li > aside:hover,
-aside[data-tei-tag="note"]:hover {
+aside[data-tei-tag="note"]:not(.acknowledgement-note):hover {
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   transform: translateX(4px);
 }
@@ -266,9 +337,9 @@ aside[data-tei-tag="note"] aside {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid #e9ecef;
+  margin-top: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #e9ecef;
 }
 
 /* Hide backlinks in nested asides since they point to the same footnote */
@@ -310,7 +381,7 @@ aside.acknowledgement-note {
 }
 
 aside.acknowledgement-note nav {
-  border-bottom: none;
+  display: none;
 }
 
 aside.acknowledgement-note p {
@@ -319,36 +390,66 @@ aside.acknowledgement-note p {
 
 /* Footnote reference links in text */
 section[data-tei-tag="body"] a[data-tei-tag="ref"] {
-  color: #e74c3c;
+  color: #B00020;
   text-decoration: none;
   font-weight: 600;
   font-size: 0.85em;
   vertical-align: super;
   padding: 0.1em 0.3em;
   border-radius: 3px;
-  background: #fee;
+  background: #fff5f5;
   transition: all 0.2s ease;
 }
 
 section[data-tei-tag="body"] a[data-tei-tag="ref"]:hover {
-  background: #e74c3c;
+  background: #B00020;
   color: white;
-  box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
+  box-shadow: 0 2px 4px rgba(176, 0, 32, 0.3);
+}
+
+section[data-tei-tag="body"] a[data-tei-tag="ref"]:focus-visible {
+  outline: 2px solid #B00020;
+  outline-offset: 2px;
+}
+
+/* Page and Figure reference links */
+a.page-ref, a.fig-ref {
+  color: #62708d;
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px dotted;
+}
+
+a.page-ref:hover, a.fig-ref:hover {
+  border-bottom-style: solid;
 }
 
 /* Table of Contents Styling */
 .table-of-contents {
+  background: #f5f5f5;
+  border-radius: 5px;
+  padding: 1.5rem;
   margin: 2rem 0 3rem 0;
 }
 
+.table-of-contents[open] {
+  padding-bottom: 2rem;
+}
+
+.toc-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+}
+
 .toc-item {
-  margin: 0.75rem 1rem 0;
+  margin: 1rem 1rem 0;
   font-weight: bold;
 }
 
 .toc-link {
   color: unset;
-  text-decoration: none;
   transition: all 0.3s ease;
   display: inline-block;
   padding: 0.25rem 0.5rem;
@@ -356,7 +457,6 @@ section[data-tei-tag="body"] a[data-tei-tag="ref"]:hover {
 
 .toc-link:hover {
   transform: translateX(5px);
-  text-decoration: underline;
 }
 
 /* Scroll behavior for smooth jumping */
@@ -408,6 +508,24 @@ aside:target {
   
   h2 {
     font-size: 1.5rem;
+  }
+
+  .toc-title {
+    font-size: 1.5rem;
+  }
+
+  /* Responsive table handling */
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+  }
+  
+  th, td {
+    padding: 6px;
+    font-size: 0.9rem;
+    min-width: 80px;
   }
 }
 
