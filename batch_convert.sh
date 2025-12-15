@@ -5,8 +5,8 @@
 
 INPUT_DIR="$1"
 OUTPUT_DIR="$2"
-SITE_TITLE="${3:-TEI Document Viewer}"
-BRAND_NAME="${4:-UCPEC}"
+SITE_TITLE="${3:-UC Press E-Books Collection, 1982-2004}"
+BRAND_NAME="${4:-UC Press E-Books Collection, 1982-2004}"
 
 if [ -z "$INPUT_DIR" ] || [ -z "$OUTPUT_DIR" ]; then
     echo "Usage: $0 <input_directory> <output_directory> [site_title] [brand_name]"

@@ -4,8 +4,8 @@
 # Usage: ./create_branded_html.sh input.xml [site_title] [brand_name]
 
 TEI_FILE="$1"
-SITE_TITLE="${2:-TEI Document Viewer}"
-BRAND_NAME="${3:-UCPEC}"
+SITE_TITLE="${2:-UC Press E-Books Collection, 1982-2004}"
+BRAND_NAME="${3:-UC Press E-Books Collection, 1982-2004}"
 
 if [ -z "$TEI_FILE" ]; then
     echo "Usage: $0 <tei_file.xml> [site_title] [brand_name]"
@@ -15,6 +15,15 @@ fi
 # Convert TEI to HTML fragment
 TEI_CONTENT=$(docker run --rm -v "$(dirname "$(realpath "$TEI_FILE")"):/data" ucpec_static:latest exe/ucpec_static t 2h "/data/$(basename "$TEI_FILE")")
 
+# Read CSS content for inlining
+CSS_FILE="templates/styles.css"
+if [ ! -f "$CSS_FILE" ]; then
+    echo "Warning: CSS file '$CSS_FILE' not found, proceeding without styles" >&2
+    CSS_CONTENT=""
+else
+    CSS_CONTENT=$(<"$CSS_FILE")
+fi
+
 # Create the complete HTML document
 cat << EOF
 <!DOCTYPE html>
@@ -23,7 +32,9 @@ cat << EOF
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>$SITE_TITLE</title>
-  <link rel="stylesheet" href="templates/styles.css">
+  <style>
+$CSS_CONTENT
+  </style>
 </head>
 <body>
   <header class="site-header">
@@ -36,7 +47,6 @@ cat << EOF
         <ul>
           <li><a href="#home">Home</a></li>
           <li><a href="#browse">Browse</a></li>
-          <li><a href="#search">Search</a></li>
           <li><a href="#about">About</a></li>
         </ul>
       </nav>
@@ -57,8 +67,8 @@ cat << EOF
         <a href="#contact">Contact</a>
         <a href="#help">Help</a>
       </div>
-      <p>&copy; 2025 $BRAND_NAME. All rights reserved.</p>
-      <p>Powered by California Digital Library</p>
+      <p>$BRAND_NAME, is a joint publication of the <a href="https://cdlib.org">California Digital Library</a> and <a href="https://ucpress.edu">University of California Press</a>.</p>
+      <p>&copy; 2025 The Regents of the University of California </p>
     </div>
   </footer>
 </body>

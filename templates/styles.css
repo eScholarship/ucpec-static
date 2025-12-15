@@ -67,6 +67,7 @@ body {
 
 .book-cover img {
   max-width: 300px;
+  min-width: 200px;
   height: auto;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
@@ -116,18 +117,16 @@ body {
   margin: 0.5rem 0;
 }
 
+.site-footer a {
+  color: #3498db; 
+}
+
 .footer-links {
   margin: 1rem 0;
 }
 
 .footer-links a {
-  color: #3498db;
-  text-decoration: none;
   margin: 0 1rem;
-}
-
-.footer-links a:hover {
-  text-decoration: underline;
 }
 
 /* TEI-specific styles */
@@ -228,7 +227,7 @@ blockquote[data-tei-tag="epigraph"] {
   content: none;
 }
 
-figure {
+figure:not([data-type="dedication"] figure) {
   margin: 2rem 0;
   text-align: center;
   padding: 1rem;
@@ -241,6 +240,10 @@ figure img {
   height: auto;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+[data-type="dedication"] figure {
+  display: inline;
 }
 
 .caption {
