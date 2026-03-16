@@ -1,0 +1,84 @@
+.subject-count {
+  font-size: 1rem;
+  font-weight: normal;
+  color: #666;
+  margin-left: 0.5rem;
+}
+
+details {
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+details summary {
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.05rem;
+  background: #f8f9fa;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  user-select: none;
+}
+
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+details summary::before {
+  content: "▶";
+  font-size: 0.7rem;
+  color: #62708d;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+details[open] summary {
+  background: #e9ecef;
+  border-bottom: 1px solid #dee2e6;
+}
+
+details summary:hover {
+  background: #e9ecef;
+}
+
+details ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+details li {
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid #f0f0f0;
+  line-height: 1.5;
+}
+
+details li:last-child {
+  border-bottom: none;
+}
+
+.book-subjects {
+  margin-top: 0.3rem;
+}
+
+.book-subjects a {
+  color: #62708d;
+  text-decoration: none;
+}
+
+.book-subjects a:hover {
+  text-decoration: underline;
+}
+
+.book-description {
+  margin-top: 0.5rem;
+}

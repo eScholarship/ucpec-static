@@ -1,0 +1,79 @@
+.alpha-nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 1.5rem 0 2rem;
+  padding: 1rem 1.25rem;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+}
+
+.alpha-nav a,
+.alpha-nav span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 4px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.alpha-nav a {
+  color: #62708d;
+  background: #e2e6f0;
+}
+
+.alpha-nav a:hover {
+  background: #62708d;
+  color: #fff;
+}
+
+.alpha-nav span {
+  color: #ccc;
+  cursor: default;
+}
+
+.letter-section {
+  margin-top: 2.5rem;
+}
+
+.letter-section h2 {
+  border-bottom: 2px solid #dee2e6;
+  color: #62708d;
+}
+
+.book-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.book-list li {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.book-list li:last-child {
+  border-bottom: none;
+}
+
+.back-to-top {
+  display: inline-block;
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  color: #62708d;
+  text-decoration: none;
+}
+
+.back-to-top:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .letter-section h2 {
+    font-size: 1.5rem;
+  }
+}
