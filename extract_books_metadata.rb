@@ -71,6 +71,7 @@ def parse_mets(file)
 
   publisher = mods&.at_xpath("mods:originInfo/mods:publisher", NS)&.text&.strip
   year      = mods&.at_xpath("mods:originInfo/mods:dateIssued[@encoding='marc']", NS)&.text&.strip
+  year    ||= mods&.at_xpath("mods:originInfo/mods:dateIssued[not(@encoding)]", NS)&.text&.strip&.sub(/\Ac/, "")
 
   {
     "ark"            => ark,
