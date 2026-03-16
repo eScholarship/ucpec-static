@@ -15,13 +15,14 @@ fi
 # Convert TEI to HTML fragment
 TEI_CONTENT=$(docker run --rm -v "$(dirname "$(realpath "$TEI_FILE")"):/data" ucpec_static:latest exe/ucpec_static t 2h "/data/$(basename "$TEI_FILE")")
 
-# Read CSS content for inlining
+# Read CSS content for inlining (base styles and book-specific additions)
+BASE_CSS="templates/base.css"
 CSS_FILE="templates/styles.css"
-if [ ! -f "$CSS_FILE" ]; then
-    echo "Warning: CSS file '$CSS_FILE' not found, proceeding without styles" >&2
+if [ ! -f "$BASE_CSS" ] && [ ! -f "$CSS_FILE" ]; then
+    echo "Warning: CSS files not found, proceeding without styles" >&2
     CSS_CONTENT=""
 else
-    CSS_CONTENT=$(<"$CSS_FILE")
+    CSS_CONTENT=$(cat ${BASE_CSS:+"$BASE_CSS"} ${CSS_FILE:+"$CSS_FILE"} 2>/dev/null)
 fi
 
 # Create the complete HTML document
