@@ -14,7 +14,6 @@ require "json"
 require "erb"
 require "optparse"
 require "pathname"
-require "erb"
 
 include ERB::Util
 
@@ -31,7 +30,7 @@ def pub_info(book)
   [book["publisher"], book["year"]].compact.reject(&:empty?).join(", ")
 end
 
-# Converts a subject string to a slug for use in HTML IDs 
+# Converts a subject string to a slug for use in HTML IDs
 # (e.g. "Cinema and Performance Arts" -> "cinema-and-performance-arts")
 def subject_slug(subject)
   subject.downcase.gsub(/[^a-z0-9]+/, "-").delete_prefix("-").delete_suffix("-")
@@ -39,6 +38,13 @@ end
 
 def render(template_path, b)
   ERB.new(File.read(template_path), trim_mode: "-").result(b)
+end
+
+def render_with_layout(inner_template, css_file, b)
+  b.local_variable_set(:page_content, render(inner_template, b))
+  b.local_variable_set(:page_css,     File.read(css_file))
+  b.local_variable_set(:base_css,     File.read(TEMPLATES.join("base.css")))
+  render(TEMPLATES.join("_layout.html.erb"), b)
 end
 
 options = { books: "./data/books.json", output_dir: "./output" }
@@ -61,13 +67,12 @@ public_books = all_books.select { |b| b["public"] }
 output_dir = Pathname.new(options[:output_dir])
 output_dir.mkpath
 
-base_css = File.read(TEMPLATES.join("base.css"))
-
 warn "Loaded #{all_books.size} books (#{public_books.size} public)."
 
 # Browse by Subject
 
 subject_template = TEMPLATES.join("browse_subject.html.erb")
+subject_css      = TEMPLATES.join("browse_subject.css")
 
 [
   { file: "browse_subject_all.html",    books: all_books,    page_title: "Browse by Subject" },
@@ -82,7 +87,7 @@ subject_template = TEMPLATES.join("browse_subject.html.erb")
   end
   subjects_map = subjects_map.sort.to_h
 
-  html = render(subject_template, binding)
+  html = render_with_layout(subject_template, subject_css, binding)
   output_dir.join(variant[:file]).write(html)
   warn "Wrote #{variant[:file]} (#{subjects_map.size} subjects)"
 end
@@ -90,6 +95,7 @@ end
 # Browse by Title
 
 title_template = TEMPLATES.join("browse_title.html.erb")
+title_css      = TEMPLATES.join("browse_title.css")
 
 [
   { file: "browse_title_all.html",    books: all_books,    page_title: "Browse by Title" },
@@ -102,7 +108,7 @@ title_template = TEMPLATES.join("browse_title.html.erb")
   active_letters        = books_by_letter.keys.compact.sort
   all_letters           = ("A".."Z").to_a
 
-  html = render(title_template, binding)
+  html = render_with_layout(title_template, title_css, binding)
   output_dir.join(variant[:file]).write(html)
   warn "Wrote #{variant[:file]} (#{current_books.size} titles)"
 end

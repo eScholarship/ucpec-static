@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= page_title ? "#{h(page_title)} | #{h(SITE_TITLE)}" : h(SITE_TITLE) %></title>
+  <style>
+<%= base_css %>
+
+/* Shared browse page styles */
+
+.browse-header {
+  margin-bottom: 2rem;
+}
+
+.browse-header p {
+  color: #666;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  text-indent: 0;
+}
+
+.book-title a {
+  color: #62708d;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.book-title a:hover {
+  text-decoration: underline;
+}
+
+.book-meta {
+  margin-top: 0.2rem;
+}
+
+.book-pub {
+  font-style: italic;
+  color: #777;
+}
+
+<%= page_css %>
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div>
+        <h1 class="brand"><%= h(BRAND_NAME) %></h1>
+        <div class="tagline">formerly eScholarship Editions</div>
+      </div>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="browse_subject_public.html">Browse by Subject</a></li>
+          <li><a href="browse_title_public.html">Browse by Title</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<%= page_content %>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Use</a>
+        <a href="contact.html">Contact</a>
+        <a href="help.html">Help</a>
+      </div>
+      <p><%= h(BRAND_NAME) %> is a joint publication of the <a href="https://cdlib.org">California Digital Library</a> and <a href="https://ucpress.edu">University of California Press</a>.</p>
+      <p>&copy; 2025 The Regents of the University of California</p>
+    </div>
+  </footer>
+</body>
+</html>
