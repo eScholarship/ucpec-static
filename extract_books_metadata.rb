@@ -45,13 +45,48 @@ def title_sort_key(title_main)
     .sub(/^A\s+/, "")
 end
 
+# Fallback parser for METS files that have only a mods dmdSec (no ucpress dmdSec)
+# A handful of METS files were "built using MODS records provided by UCSD"
+def parse_mets_mods_fallback(doc, mods)
+  ark = doc.root["OBJID"].to_s.split("/").last.strip
+
+  title_info = mods.at_xpath("mods:titleInfo", NS)
+  title = [
+    title_info&.at_xpath("mods:nonSort", NS)&.text,
+    title_info&.at_xpath("mods:title", NS)&.text,
+    title_info&.at_xpath("mods:subTitle", NS)&.text
+  ].compact.join
+
+  creator = mods.at_xpath("mods:name[@type='personal'][mods:role/mods:text='creator']", NS)
+  author  = creator&.at_xpath("mods:namePart[not(@type)]", NS)&.text&.strip
+
+  publisher = mods.at_xpath("mods:originInfo/mods:publisher", NS)&.text&.strip
+  year      = mods.at_xpath("mods:originInfo/mods:dateIssued[@encoding='marc']", NS)&.text&.strip
+  year    ||= mods.at_xpath("mods:originInfo/mods:dateIssued[not(@encoding)]", NS)&.text&.strip&.sub(/\Ac/, "")
+
+  {
+    "ark"            => ark,
+    "title"          => title,
+    "title_sort_key" => title_sort_key(title),
+    "author"         => author,
+    "subjects"       => [],
+    "public"         => true,
+    "publisher"      => publisher,
+    "year"           => year,
+    "description"    => nil,
+    "author_bio"     => nil,
+    "series"         => nil
+  }
+end
+
 def parse_mets(file)
   doc = Nokogiri::XML(File.read(file, encoding: "UTF-8"))
 
-  ucp = doc.at_xpath("//mets:dmdSec[@ID='ucpress']//cdl:ROW", NS)
-  return nil unless ucp
-
+  ucp  = doc.at_xpath("//mets:dmdSec[@ID='ucpress']//cdl:ROW", NS)
   mods = doc.at_xpath("//mets:dmdSec[@ID='mods']//mods:mods", NS)
+
+  return parse_mets_mods_fallback(doc, mods) if ucp.nil? && mods
+  return nil if ucp.nil?
 
   ark_full   = data_of(ucp, "ARK.ARK").to_s
   ark        = ark_full.split("/").last.to_s.strip
@@ -66,8 +101,8 @@ def parse_mets(file)
 
   subjects = (1..10).filter_map do |i|
     val = text_of(ucp, "SubDescs#{i}")
-    val unless val.nil? || val.empty?
-  end
+    val.gsub(" & ", " and ") unless val.nil? || val.empty?
+  end.uniq
 
   publisher = mods&.at_xpath("mods:originInfo/mods:publisher", NS)&.text&.strip
   year      = mods&.at_xpath("mods:originInfo/mods:dateIssued[@encoding='marc']", NS)&.text&.strip
@@ -108,7 +143,7 @@ warn "Parsing #{mets_files.size} METS files..."
 books = mets_files.filter_map do |file|
   result = parse_mets(file)
   if result.nil?
-    warn "  Skipped (no ucpress dmdSec): #{file}"
+    warn "  Skipped (no usable dmdSec): #{file}"
   else
     warn "  OK: #{result["ark"]} — #{result["title"]}"
   end
