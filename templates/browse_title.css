@@ -53,6 +53,10 @@
 }
 
 .book-list li {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 0.75rem 0;
   border-bottom: 1px solid #f0f0f0;
 }
 
