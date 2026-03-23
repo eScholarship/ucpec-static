@@ -13,6 +13,9 @@
         <span aria-hidden="true"><%= letter %></span>
         <% end -%>
         <% end -%>
+        <% if has_other -%>
+        <a href="#letter-Other">Other</a>
+        <% end -%>
       </nav>
 
       <% books_by_letter.each do |letter, books_in_section| -%>

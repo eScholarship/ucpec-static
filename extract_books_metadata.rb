@@ -43,6 +43,7 @@ def title_sort_key(title_main)
     .sub(/^THE\s+/, "")
     .sub(/^AN\s+/, "")
     .sub(/^A\s+/, "")
+    .sub(/\A[^A-Z0-9]+/, "")
 end
 
 # Fallback parser for METS files that have only a mods dmdSec (no ucpress dmdSec)

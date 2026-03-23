@@ -104,9 +104,14 @@ title_css      = TEMPLATES.join("browse_title.css")
   current_books  = variant[:books].sort_by { |b| b["title_sort_key"] }
   page_title     = variant[:page_title]
 
-  books_by_letter       = current_books.group_by { |b| b["title_sort_key"][0] }
-  active_letters        = books_by_letter.keys.compact.sort
-  all_letters           = ("A".."Z").to_a
+  books_by_letter = current_books.group_by do |b|
+    first = b["title_sort_key"].sub(/\A[^A-Z0-9]+/, "")[0]
+    (first && first.match?(/[A-Z]/)) ? first : "Other"
+  end
+  books_by_letter = books_by_letter.sort_by { |k, _| k == "Other" ? "\xFF" : k }.to_h
+  active_letters  = books_by_letter.keys.reject { |k| k == "Other" }.sort
+  has_other       = books_by_letter.key?("Other")
+  all_letters     = ("A".."Z").to_a
 
   html = render_with_layout(title_template, title_css, binding)
   output_dir.join(variant[:file]).write(html)
