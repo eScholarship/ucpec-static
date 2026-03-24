@@ -46,24 +46,48 @@ def title_sort_key(title_main)
     .sub(/\A[^A-Z0-9]+/, "")
 end
 
-# Fallback parser for METS files that have only a mods dmdSec (no ucpress dmdSec)
-# A handful of METS files were "built using MODS records provided by UCSD"
-def parse_mets_mods_fallback(doc, mods)
-  ark = doc.root["OBJID"].to_s.split("/").last.strip
-
+def mods_title(mods)
   title_info = mods.at_xpath("mods:titleInfo", NS)
-  title = [
+  [
     title_info&.at_xpath("mods:nonSort", NS)&.text,
     title_info&.at_xpath("mods:title", NS)&.text,
     title_info&.at_xpath("mods:subTitle", NS)&.text
   ].compact.join
+end
 
+def mods_author(mods)
   creator = mods.at_xpath("mods:name[@type='personal'][mods:role/mods:text='creator']", NS)
-  author  = creator&.at_xpath("mods:namePart[not(@type)]", NS)&.text&.strip
+  creator&.at_xpath("mods:namePart[not(@type)]", NS)&.text&.strip
+end
 
-  publisher = mods.at_xpath("mods:originInfo/mods:publisher", NS)&.text&.strip
-  year      = mods.at_xpath("mods:originInfo/mods:dateIssued[@encoding='marc']", NS)&.text&.strip
-  year    ||= mods.at_xpath("mods:originInfo/mods:dateIssued[not(@encoding)]", NS)&.text&.strip&.sub(/\Ac/, "")
+def mods_year(origin)
+  return nil if origin.nil?
+
+  year = origin.at_xpath("mods:dateIssued[@encoding='marc']", NS)&.text&.strip
+  year ||= origin.at_xpath("mods:dateIssued[not(@encoding)]", NS)&.text&.strip&.sub(/\Ac/, "")
+  year
+end
+
+def mods_publisher_year(mods_node)
+  origin = mods_node&.at_xpath("mods:originInfo", NS)
+  publisher = origin&.at_xpath("mods:publisher", NS)&.text&.strip
+  [publisher, mods_year(origin)]
+end
+
+def parse_subjects(ucp)
+  (1..10).filter_map do |i|
+    val = text_of(ucp, "SubDescs#{i}")
+    val.gsub(" & ", " and ") unless val.nil? || val.empty?
+  end.uniq
+end
+
+# Fallback parser for METS files that have only a mods dmdSec (no ucpress dmdSec)
+# A handful of METS files were "built using MODS records provided by UCSD"
+def parse_mets_mods_fallback(doc, mods)
+  ark = doc.root["OBJID"].to_s.split("/").last.strip
+  title = mods_title(mods)
+  author = mods_author(mods)
+  publisher, year = mods_publisher_year(mods)
 
   {
     "ark"            => ark,
@@ -89,38 +113,21 @@ def parse_mets(file)
   return parse_mets_mods_fallback(doc, mods) if ucp.nil? && mods
   return nil if ucp.nil?
 
-  ark_full   = data_of(ucp, "ARK.ARK").to_s
-  ark        = ark_full.split("/").last.to_s.strip
-
-  title      = data_of(ucp, "UCPnum.Title")
-  title_main = data_of(ucp, "UCPnum.TitleMain")
-  author     = data_of(ucp, "UCPnum.AUTHOR_CITATION_FWD")
-  public_val = text_of(ucp, "public_nonPublic")
-  description = data_of(ucp, "UCPnum.Copy")
-  author_bio  = data_of(ucp, "UCPnum.AuthorBioInCatalog")
-  series      = data_of(ucp, "UCPnum.Series_name")
-
-  subjects = (1..10).filter_map do |i|
-    val = text_of(ucp, "SubDescs#{i}")
-    val.gsub(" & ", " and ") unless val.nil? || val.empty?
-  end.uniq
-
-  publisher = mods&.at_xpath("mods:originInfo/mods:publisher", NS)&.text&.strip
-  year      = mods&.at_xpath("mods:originInfo/mods:dateIssued[@encoding='marc']", NS)&.text&.strip
-  year    ||= mods&.at_xpath("mods:originInfo/mods:dateIssued[not(@encoding)]", NS)&.text&.strip&.sub(/\Ac/, "")
+  ark = data_of(ucp, "ARK.ARK").to_s.split("/").last.to_s.strip
+  publisher, year = mods_publisher_year(mods)
 
   {
     "ark"            => ark,
-    "title"          => title,
-    "title_sort_key" => title_sort_key(title_main),
-    "author"         => author,
-    "subjects"       => subjects,
-    "public"         => public_val == "Public",
+    "title"          => data_of(ucp, "UCPnum.Title"),
+    "title_sort_key" => title_sort_key(data_of(ucp, "UCPnum.TitleMain")),
+    "author"         => data_of(ucp, "UCPnum.AUTHOR_CITATION_FWD"),
+    "subjects"       => parse_subjects(ucp),
+    "public"         => text_of(ucp, "public_nonPublic") == "Public",
     "publisher"      => publisher,
     "year"           => year,
-    "description"    => description,
-    "author_bio"     => author_bio,
-    "series"         => series
+    "description"    => data_of(ucp, "UCPnum.Copy"),
+    "author_bio"     => data_of(ucp, "UCPnum.AuthorBioInCatalog"),
+    "series"         => data_of(ucp, "UCPnum.Series_name")
   }
 end
 
@@ -132,7 +139,7 @@ OptionParser.new do |opts|
   opts.on("--output FILE", "Output path for books.json") { |v| options[:output] = v }
 end.parse!
 
-mets_files = Dir.glob(File.join(options[:mets_dir], "**", "*.mets.xml")).sort
+mets_files = Dir.glob(File.join(options[:mets_dir], "**", "*.mets.xml"))
 
 if mets_files.empty?
   warn "No .mets.xml files found under #{options[:mets_dir]}"

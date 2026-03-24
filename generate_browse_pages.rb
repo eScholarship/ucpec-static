@@ -15,7 +15,7 @@ require "erb"
 require "optparse"
 require "pathname"
 
-include ERB::Util
+include ERB::Util # rubocop:disable Style/MixinUsage
 
 SITE_TITLE  = "UC Press E-Books Collection, 1982-2004"
 BRAND_NAME  = "UC Press E-Books Collection, 1982-2004"
@@ -106,7 +106,7 @@ title_css      = TEMPLATES.join("browse_title.css")
 
   books_by_letter = current_books.group_by do |b|
     first = b["title_sort_key"].sub(/\A[^A-Z0-9]+/, "")[0]
-    (first && first.match?(/[A-Z]/)) ? first : "Other"
+    first&.match?(/[A-Z]/) ? first : "Other"
   end
   books_by_letter = books_by_letter.sort_by { |k, _| k == "Other" ? "\xFF" : k }.to_h
   active_letters  = books_by_letter.keys.reject { |k| k == "Other" }.sort
