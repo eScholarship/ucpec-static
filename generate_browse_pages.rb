@@ -1,7 +1,10 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# Generates four static HTML browse pages from the books.json cache
+# Generates static HTML browse pages from the books.json cache
+# Outputs two folder variants:
+# <output-dir>/public/ - public books only
+# <output-dir>/uc/ - all books (staff/internal use)
 
 # Usage:
 # Fetch cache from S3 first:
@@ -64,8 +67,14 @@ end
 all_books    = JSON.parse(File.read(options[:books]))
 public_books = all_books.select { |b| b["public"] }
 
-output_dir = Pathname.new(options[:output_dir])
-output_dir.mkpath
+base_dir = Pathname.new(options[:output_dir])
+
+variants = [
+  { dir: base_dir.join("public"), books: public_books },
+  { dir: base_dir.join("uc"),     books: all_books }
+]
+
+variants.each { |v| v[:dir].mkpath }
 
 warn "Loaded #{all_books.size} books (#{public_books.size} public)."
 
@@ -74,12 +83,9 @@ warn "Loaded #{all_books.size} books (#{public_books.size} public)."
 subject_template = TEMPLATES.join("browse_subject.html.erb")
 subject_css      = TEMPLATES.join("browse_subject.css")
 
-[
-  { file: "browse_subject_all.html",    books: all_books,    page_title: "Browse by Subject" },
-  { file: "browse_subject_public.html", books: public_books, page_title: "Browse by Subject" }
-].each do |variant|
+variants.each do |variant|
   current_books = variant[:books]
-  page_title    = variant[:page_title]
+  page_title    = "Browse by Subject"
 
   subjects_map = Hash.new { |h, k| h[k] = [] }
   current_books.each do |book|
@@ -88,8 +94,8 @@ subject_css      = TEMPLATES.join("browse_subject.css")
   subjects_map = subjects_map.sort.to_h
 
   html = render_with_layout(subject_template, subject_css, binding)
-  output_dir.join(variant[:file]).write(html)
-  warn "Wrote #{variant[:file]} (#{subjects_map.size} subjects)"
+  variant[:dir].join("browse_subject.html").write(html)
+  warn "Wrote #{variant[:dir].basename}/browse_subject.html (#{subjects_map.size} subjects)"
 end
 
 # Browse by Title
@@ -97,12 +103,9 @@ end
 title_template = TEMPLATES.join("browse_title.html.erb")
 title_css      = TEMPLATES.join("browse_title.css")
 
-[
-  { file: "browse_title_all.html",    books: all_books,    page_title: "Browse by Title" },
-  { file: "browse_title_public.html", books: public_books, page_title: "Browse by Title" }
-].each do |variant|
-  current_books  = variant[:books].sort_by { |b| b["title_sort_key"] }
-  page_title     = variant[:page_title]
+variants.each do |variant|
+  current_books = variant[:books].sort_by { |b| b["title_sort_key"] }
+  page_title    = "Browse by Title"
 
   books_by_letter = current_books.group_by do |b|
     first = b["title_sort_key"].sub(/\A[^A-Z0-9]+/, "")[0]
@@ -114,8 +117,8 @@ title_css      = TEMPLATES.join("browse_title.css")
   all_letters     = ("A".."Z").to_a
 
   html = render_with_layout(title_template, title_css, binding)
-  output_dir.join(variant[:file]).write(html)
-  warn "Wrote #{variant[:file]} (#{current_books.size} titles)"
+  variant[:dir].join("browse_title.html").write(html)
+  warn "Wrote #{variant[:dir].basename}/browse_title.html (#{current_books.size} titles)"
 end
 
-warn "\nDone. 4 pages written to #{output_dir}/"
+warn "\nDone. 4 pages written to #{base_dir}/ (public/ and uc/)"

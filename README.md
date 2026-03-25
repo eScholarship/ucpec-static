@@ -126,14 +126,14 @@ ruby generate_browse_pages.rb \
   --output-dir ./output
 ```
 
-This reads `data/books.json` and renders four static HTML files using ERB templates:
+This reads `data/books.json` and renders four static HTML files using ERB templates, written into two subfolders of `--output-dir`:
 
-| File | Description |
-|---|---|
-| `browse_subject_all.html` | Browse by subject — all books |
-| `browse_subject_public.html` | Browse by subject — publicly accessible books only |
-| `browse_title_all.html` | Browse by title — all books |
-| `browse_title_public.html` | Browse by title — publicly accessible books only |
+| Folder | File | Description |
+|---|---|---|
+| `public/` | `browse_subject.html` | Browse by subject — publicly accessible books only |
+| `public/` | `browse_title.html` | Browse by title — publicly accessible books only |
+| `uc/` | `browse_subject.html` | Browse by subject — all books (staff/internal use) |
+| `uc/` | `browse_title.html` | Browse by title — all books (staff/internal use) |
 
 Templates live in `templates/browse_subject.html.erb` and `templates/browse_title.html.erb`.
 
