@@ -23,9 +23,9 @@ output_dirs = [base_dir.join("public"), base_dir.join("uc")]
 output_dirs.each(&:mkpath)
 
 pages = [
-  { filename: "index.html",  template: "home.html.erb",  title: "Home" },
-  { filename: "about.html",  template: "about.html.erb",  title: "About" },
-  { filename: "help.html",   template: "help.html.erb",   title: "Help" }
+  { filename: "index.html", template: "home.html.erb", title: "Home" },
+  { filename: "about.html", template: "about.html.erb", title: "About" },
+  { filename: "help.html", template: "help.html.erb", title: "Help" }
 ]
 
 pages.each do |page|
