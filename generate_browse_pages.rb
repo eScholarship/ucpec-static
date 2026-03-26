@@ -14,15 +14,9 @@
 # ruby generate_browse_pages.rb --books ./data/books.json --output-dir ./output
 
 require "json"
-require "erb"
 require "optparse"
 require "pathname"
-
-include ERB::Util # rubocop:disable Style/MixinUsage
-
-SITE_TITLE  = "UC Press E-Books Collection, 1982-2004"
-BRAND_NAME  = "UC Press E-Books Collection, 1982-2004"
-TEMPLATES   = Pathname.new(__dir__).join("templates")
+require_relative "shared_page_helpers"
 
 def book_url(ark)
   # TODO: Update this to the new URL
@@ -37,17 +31,6 @@ end
 # (e.g. "Cinema and Performance Arts" -> "cinema-and-performance-arts")
 def subject_slug(subject)
   subject.downcase.gsub(/[^a-z0-9]+/, "-").delete_prefix("-").delete_suffix("-")
-end
-
-def render(template_path, b)
-  ERB.new(File.read(template_path), trim_mode: "-").result(b)
-end
-
-def render_with_layout(inner_template, css_file, b)
-  b.local_variable_set(:page_content, render(inner_template, b))
-  b.local_variable_set(:page_css,     File.read(css_file))
-  b.local_variable_set(:base_css,     File.read(TEMPLATES.join("base.css")))
-  render(TEMPLATES.join("_layout.html.erb"), b)
 end
 
 options = { books: "./data/books.json", output_dir: "./output" }
@@ -93,7 +76,7 @@ variants.each do |variant|
   end
   subjects_map = subjects_map.sort.to_h
 
-  html = render_with_layout(subject_template, subject_css, binding)
+  html = render_with_layout(subject_template, binding, css_file: subject_css)
   variant[:dir].join("browse_subject.html").write(html)
   warn "Wrote #{variant[:dir].basename}/browse_subject.html (#{subjects_map.size} subjects)"
 end
@@ -116,7 +99,7 @@ variants.each do |variant|
   has_other       = books_by_letter.key?("Other")
   all_letters     = ("A".."Z").to_a
 
-  html = render_with_layout(title_template, title_css, binding)
+  html = render_with_layout(title_template, binding, css_file: title_css)
   variant[:dir].join("browse_title.html").write(html)
   warn "Wrote #{variant[:dir].basename}/browse_title.html (#{current_books.size} titles)"
 end
