@@ -1,0 +1,46 @@
+  <main class="document-content">
+    <div class="container">
+      <div class="browse-header">
+        <h1><%= h(page_title) %></h1>
+      </div>
+
+      <% subjects_map.each do |subject, books_in_subject| -%>
+      <details id="subject-<%= subject_slug(subject) %>">
+        <summary>
+          <%= h(subject) %>
+          <span class="subject-count">(<%= books_in_subject.size %>)</span>
+        </summary>
+        <ul>
+          <% books_in_subject.sort_by { |b| b["title_sort_key"] }.each do |book| -%>
+          <li>
+            <img class="book-list-cover" src="https://ucpec.s3.amazonaws.com/book_files/<%= book["ark"] %>/figures/<%= book["ark"] %>_cover.jpg" alt="Cover of <%= h(book["title"]) %>" loading="lazy" onerror="this.style.display='none'">
+            <div>
+              <div class="book-title">
+                <a href="<%= book_url(book["ark"]) %>"><%= h(book["title"]) %></a>
+              </div>
+              <div class="book-meta">
+                <% if book["author"] && !book["author"].empty? -%>
+                <%= h(book["author"]) %>
+                <% end -%>
+                <% info = pub_info(book) -%>
+                <% unless info.empty? -%>
+                &mdash; <span class="book-pub"><%= h(info) %></span>
+                <% end -%>
+              </div>
+              <% if book["subjects"] && book["subjects"].size > 1 -%>
+              <div class="book-subjects">
+                Subjects:
+                <%= book["subjects"].map { |s| %(<a href="#subject-#{subject_slug(s)}">#{h(s)}</a>) }.join(" | ") %>
+              </div>
+              <% end -%>
+              <% if book["description"] && !book["description"].empty? -%>
+              <div class="book-description"><%= h(book["description"]) %></div>
+              <% end -%>
+            </div>
+          </li>
+          <% end -%>
+        </ul>
+      </details>
+      <% end -%>
+    </div>
+  </main>

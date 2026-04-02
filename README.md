@@ -106,6 +106,64 @@ Batch converts multiple TEI XML files in a directory to branded HTML documents.
 - Review changes: `git diff`
 - Commit and push
 
+### Browse Page Generation
+
+The browse pages are static HTML files generated from `data/books.json`, a cached book catalog stored in S3. For normal usage you do not need to regenerate this cache — just fetch it from S3 and go straight to page generation.
+
+#### Normal workflow: fetch the cache and generate pages
+
+Fetch the pre-built cache from S3:
+
+```bash
+aws s3 cp s3://ucpec/data/books.json ./data/books.json --profile <profile>
+```
+
+Then generate the browse pages:
+
+```bash
+ruby generate_browse_pages.rb \
+  --books ./data/books.json \
+  --output-dir ./output
+```
+
+This reads `data/books.json` and renders four static HTML files using ERB templates, written into two subfolders of `--output-dir`:
+
+| Folder | File | Description |
+|---|---|---|
+| `public/` | `browse_subject.html` | Browse by subject — publicly accessible books only |
+| `public/` | `browse_title.html` | Browse by title — publicly accessible books only |
+| `uc/` | `browse_subject.html` | Browse by subject — all books (staff/internal use) |
+| `uc/` | `browse_title.html` | Browse by title — all books (staff/internal use) |
+
+Templates live in `templates/browse_subject.html.erb` and `templates/browse_title.html.erb`.
+
+#### Regenerating the metadata cache (only needed when source data changes):
+
+If the underlying METS XML files in S3 have changed and the cache needs to be rebuilt, first sync the METS files:
+
+```bash
+aws s3 sync s3://ucpec/book_files/ ./tmp/book_files/ \
+  --exclude "*" \
+  --include "*.mets.xml" \
+  --profile <profile>
+```
+
+Then parse them and write a new cache:
+
+```bash
+ruby extract_books_metadata.rb \
+  --mets-dir ./tmp/book_files \
+  --output ./data/books.json
+```
+
+After verifying the output, upload the updated cache back to S3 so others can use it:
+
+```bash
+aws s3 cp ./data/books.json s3://ucpec/data/books.json --profile <profile>
+```
+
+
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/eScholarship/ucpec_static. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/eScholarship/ucpec_static/blob/main/CODE_OF_CONDUCT.md).
