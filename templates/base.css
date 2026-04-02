@@ -1,14 +1,18 @@
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
 body {
+  margin: 0;
+  padding: 0;
   font-family: Georgia, serif;
   line-height: 1.6;
   color: #333;
   background-color: #f8f9fa;
+}
+
+a {
+  color: #62708d;
 }
 
 .container {
@@ -54,12 +58,7 @@ body {
 
 .main-nav a {
   color: white;
-  text-decoration: none;
   font-weight: 500;
-}
-
-.main-nav a:hover {
-  text-decoration: underline;
 }
 
 .document-content {
@@ -129,11 +128,6 @@ html {
 }
 
 @media (max-width: 768px) {
-  .site-header .container {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
   .main-nav ul {
     gap: 1rem;
   }
@@ -153,5 +147,16 @@ html {
 
   h2 {
     font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .site-header .container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .brand-container {
+    text-align: center;
   }
 }
