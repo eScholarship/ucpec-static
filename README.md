@@ -101,12 +101,7 @@ The browse pages are generated from `data/books.json`, a cached book catalog sto
 
 ```bash
 aws s3 cp s3://ucpec/data/books.json ./data/books.json --profile <profile>
-```
-
-```bash
-ruby generate_browse_pages.rb \
-  --books ./data/books.json \
-  --output-dir ./output
+ruby generate_browse_pages.rb --books ./data/books.json --output-dir ./output
 ```
 
 This renders four HTML files using templates in `templates/`:
@@ -117,6 +112,11 @@ This renders four HTML files using templates in `templates/`:
 | `public/` | `browse_title.html` | Browse by title — publicly accessible books only |
 | `uc/` | `browse_subject.html` | Browse by subject — all books |
 | `uc/` | `browse_title.html` | Browse by title — all books |
+
+Options:
+
+- `--books FILE` — Path to books.json cache (default: `./data/books.json`)
+- `--output-dir DIR` — Base output directory (default: `./output`)
 
 #### Regenerating the metadata cache (only needed when source data changes)
 
@@ -143,13 +143,22 @@ After verifying the output, upload the updated cache back to S3 so others can us
 aws s3 cp ./data/books.json s3://ucpec/data/books.json --profile <profile>
 ```
 
+Options:
+
+- `--mets-dir DIR` — Directory containing downloaded METS files (default: `./tmp/book_files`)
+- `--output FILE` — Output path for books.json (default: `./data/books.json`)
+
 ### Home, about, and help pages (`generate_static_pages.rb`)
 
 ```bash
 ruby generate_static_pages.rb --output-dir ./output
 ```
 
-This renders `index.html`, `about.html`, and `help.html` from templates in `templates/`, writing them into both `public/` and `uc/` under `--output-dir`.
+Renders `index.html`, `about.html`, and `help.html` from templates in `templates/`, writing them into both `public/` and `uc/` under `--output-dir`.
+
+Options:
+
+- `--output-dir DIR` — Base output directory (default: `./output`)
 
 ---
 
