@@ -9,7 +9,7 @@ This project has two distinct responsibilities:
 
 ## Part 1: Book pages (TEI → HTML conversion)
 
-Each book's page content is produced by converting a TEI XML file into an HTML fragment. This is handled by the `ucpec-static` gem executable and a set of shell scripts built on top of it.
+Each book's page content is produced by converting a TEI XML file into an HTML fragment. This is handled by the `ucpec-static` gem executable and Ruby scripts built on top of it.
 
 ### Running locally
 
@@ -44,40 +44,48 @@ docker run -v $(pwd)/data:/data ucpec_static:latest ./exe/ucpec_static tei to-ht
 
 ### Conversion scripts
 
-Two shell scripts wrap the converter to produce complete, branded HTML documents:
+Two Ruby scripts wrap the converter to produce complete, branded HTML documents:
 
-#### `create_branded_html.sh`
+#### `create_branded_html.rb`
 
 Converts a single TEI XML file to a complete HTML document with header, footer, and styling.
 
 ```bash
-./create_branded_html.sh input.xml [site_title] [brand_name]
+ruby create_branded_html.rb --input tei/ft0000032w.xml
 ```
+
+- `--input FILE` — (Required) Path to the TEI XML file
+
+#### `convert_books.rb`
+
+Batch converts all TEI XML files in a directory to branded HTML documents, wrapping each fragment in the shared layout template. Output is written to `<output-dir>/uc/book/` (all books) and `<output-dir>/public/book/` (public books only).
 
 ```bash
-./create_branded_html.sh data/document.xml "My Library" "UC Berkeley" > output.html
+# Normal run
+ruby convert_books.rb --input-dir ./tei --output-dir ./output
+
+# With more parallel workers
+ruby convert_books.rb --input-dir ./tei --output-dir ./output --workers 8
+
+# Re-wrap only (skip TEI conversion, reuse cached fragments in tmp/fragments/)
+ruby convert_books.rb --output-dir ./output --skip-conversion
 ```
 
-- `input.xml` — (Required) Path to the TEI XML file
-- `site_title` — (Optional) Title for the HTML page (default: "TEI Document Viewer")
-- `brand_name` — (Optional) Brand name for header (default: "UCPEC")
+Options:
 
-#### `batch_convert.sh`
+- `--input-dir DIR` — Directory of TEI XML files (default: `./tei`)
+- `--output-dir DIR` — Base output directory (default: `./output`)
+- `--books FILE` — Path to books.json cache (default: `./data/books.json`)
+- `--workers N` — Number of parallel workers (default: 4)
+- `--skip-conversion` — Skip TEI→fragment step and reuse existing `tmp/fragments/` cache
 
-Batch converts all TEI XML files in a directory to branded HTML documents.
+#### Fragment cache (`tmp/fragments/`)
 
-```bash
-./batch_convert.sh <input_directory> <output_directory> [site_title] [brand_name]
-```
+During Step 1, `convert_books.rb` writes one HTML fragment per TEI file into `tmp/fragments/` (e.g. `tmp/fragments/ft0000032w.html`). These are the raw converter outputs — no layout, no CSS, and named by ARK.
 
-```bash
-./batch_convert.sh data/ output/ "My Digital Library" "UC Berkeley"
-```
+The cache is useful when you only change the layout template or CSS and don't need to re-run the slow Docker conversion step. Pass `--skip-conversion` to go straight to Step 2 and re-wrap the existing fragments.
 
-- `input_directory` — (Required) Directory containing TEI XML files
-- `output_directory` — (Required) Directory where HTML files will be saved
-- `site_title` — (Optional) Title for HTML pages (default: "TEI Document Viewer")
-- `brand_name` — (Optional) Brand name for headers (default: "UCPEC")
+The `tmp/` directory is gitignored, fragments are ephemeral build artifacts.
 
 ---
 
