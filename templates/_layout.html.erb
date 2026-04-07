@@ -62,10 +62,10 @@
       </div>
       <nav class="main-nav">
         <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="browse_subject.html">Browse by Subject</a></li>
-          <li><a href="browse_title.html">Browse by Title</a></li>
-          <li><a href="about.html">About</a></li>
+          <li><a href="<%= base_path %>index.html">Home</a></li>
+          <li><a href="<%= base_path %>browse_subject.html">Browse by Subject</a></li>
+          <li><a href="<%= base_path %>browse_title.html">Browse by Title</a></li>
+          <li><a href="<%= base_path %>about.html">About</a></li>
         </ul>
       </nav>
     </div>
@@ -76,7 +76,7 @@
   <footer class="site-footer">
     <div class="container">
       <div class="footer-links">
-        <a href="help.html">Help</a>
+        <a href="<%= base_path %>help.html">Help</a>
       </div>
       <p><%= h(BRAND_NAME) %> is a joint publication of the <a href="https://cdlib.org">California Digital Library</a> and <a href="https://ucpress.edu">University of California Press</a>.</p>
       <p>&copy; 2025 The Regents of the University of California</p>

@@ -69,6 +69,7 @@ subject_css      = TEMPLATES.join("browse_subject.css")
 variants.each do |variant|
   current_books = variant[:books]
   page_title    = "Browse by Subject"
+  base_path     = ""
 
   subjects_map = Hash.new { |h, k| h[k] = [] }
   current_books.each do |book|
@@ -89,6 +90,7 @@ title_css      = TEMPLATES.join("browse_title.css")
 variants.each do |variant|
   current_books = variant[:books].sort_by { |b| b["title_sort_key"] }
   page_title    = "Browse by Title"
+  base_path     = ""
 
   books_by_letter = current_books.group_by do |b|
     first = b["title_sort_key"].sub(/\A[^A-Z0-9]+/, "")[0]

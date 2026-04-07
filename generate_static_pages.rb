@@ -30,6 +30,7 @@ pages = [
 
 pages.each do |page|
   page_title = page[:title]
+  base_path  = ""
   html = render_with_layout(TEMPLATES.join(page[:template]), binding)
 
   output_dirs.each do |dir|
