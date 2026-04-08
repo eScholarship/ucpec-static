@@ -7,6 +7,54 @@ This project has two distinct responsibilities:
 
 ---
 
+## Full site generation workflow (first run)
+
+If this is your first time running the project locally, you'll need to fetch a few files from S3 before generating pages. Subsequent runs can skip anything you already have.
+
+**1. Fetch the books.json cache** (required by `convert_books.rb` and `generate_browse_pages.rb`)
+
+```bash
+aws s3 cp s3://ucpec/data/books.json ./data/books.json --profile <profile>
+```
+
+**2. Build the Docker image** (required for TEI → HTML conversion)
+
+```bash
+docker build -t ucpec_static:latest .
+```
+
+**3. Convert book pages**
+
+```bash
+ruby convert_books.rb --input-dir ./tei --output-dir ./output
+```
+
+**4. Generate browse pages**
+
+```bash
+ruby generate_browse_pages.rb --books ./data/books.json --output-dir ./output
+```
+
+**5. Generate static pages** (home, about, help)
+
+```bash
+ruby generate_static_pages.rb --output-dir ./output
+```
+
+**6. Deploy to S3**
+
+```bash
+# Dry run first to review changes
+./deploy.sh --profile <profile> --env stg
+
+# Then execute
+./deploy.sh --profile <profile> --env stg --execute
+```
+
+> On subsequent runs, `data/books.json` will already be present locally. Only re-fetch it if the book catalog has changed (see [Regenerating the metadata cache](#regenerating-the-metadata-cache-only-needed-when-source-data-changes) below). Similarly, the Docker image only needs to be rebuilt if the gem code changes.
+
+---
+
 ## Part 1: Book pages (TEI → HTML conversion)
 
 Each book's page content is produced by converting a TEI XML file into an HTML fragment. This is handled by the `ucpec-static` gem executable and Ruby scripts built on top of it.
@@ -95,12 +143,9 @@ The site's browse, home, about, and help pages are generated from ERB templates 
 
 ### Browse pages (`generate_browse_pages.rb`)
 
-The browse pages are generated from `data/books.json`, a cached book catalog stored in S3. For normal usage you do not need to regenerate this cache, just fetch it from S3 and go straight to page generation.
-
-#### Normal workflow: fetch the cache and generate pages
+Generates browse pages from `data/books.json`. See the [full workflow](#full-site-generation-workflow-first-run) for how to fetch this file on a first run.
 
 ```bash
-aws s3 cp s3://ucpec/data/books.json ./data/books.json --profile <profile>
 ruby generate_browse_pages.rb --books ./data/books.json --output-dir ./output
 ```
 
