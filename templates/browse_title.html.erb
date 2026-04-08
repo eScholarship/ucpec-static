@@ -27,7 +27,7 @@
             <img class="book-list-cover" src="https://ucpec.s3.amazonaws.com/book_files/<%= book["ark"] %>/figures/<%= book["ark"] %>_cover.jpg" alt="Cover of <%= h(book["title"]) %>" loading="lazy" onerror="this.style.display='none'">
             <div>
               <div class="book-title">
-                <a href="<%= book_url(book["ark"]) %>"><%= h(book["title"]) %></a>
+                <a href="<%= book_url(book) %>"><%= h(book["title"]) %></a>
               </div>
               <div class="book-meta">
                 <% if book["author"] && !book["author"].empty? -%>

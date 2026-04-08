@@ -18,19 +18,18 @@ require "optparse"
 require "pathname"
 require_relative "shared_page_helpers"
 
-def book_url(ark)
-  # TODO: Update this to the new URL
-  "http://ark.cdlib.org/ark:/13030/#{ark}/"
+def book_url(book)
+  "book/#{slugify(book["title"])}.html"
 end
 
 def pub_info(book)
   [book["publisher"], book["year"]].compact.reject(&:empty?).join(", ")
 end
 
-# Converts a subject string to a slug for use in HTML IDs
+# Converts a string to a URL/HTML-ID-safe slug
 # (e.g. "Cinema and Performance Arts" -> "cinema-and-performance-arts")
-def subject_slug(subject)
-  subject.downcase.gsub(/[^a-z0-9]+/, "-").delete_prefix("-").delete_suffix("-")
+def slugify(str)
+  str.downcase.gsub(/[^a-z0-9]+/, "-").delete_prefix("-").delete_suffix("-")
 end
 
 options = { books: "./data/books.json", output_dir: "./output" }
