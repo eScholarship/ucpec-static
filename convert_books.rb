@@ -38,7 +38,7 @@ OptionParser.new do |opts|
 end.parse!
 
 unless File.exist?(options[:books])
-  abort "books.json not found at #{options[:books]}. Fetch it first:\n  aws s3 cp s3://ucpec/data/books.json #{options[:books]}"
+  abort "books.json not found at #{options[:books]}.
 end
 
 books_by_ark = JSON.parse(File.read(options[:books])).each_with_object({}) do |book, h|

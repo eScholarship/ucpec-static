@@ -7,10 +7,6 @@
 # <output-dir>/uc/ - all books (staff/internal use)
 
 # Usage:
-# Fetch cache from S3 first:
-# aws s3 cp s3://ucpec/data/books.json ./data/books.json
-
-# Then generate pages:
 # ruby generate_browse_pages.rb --books ./data/books.json --output-dir ./output
 
 require "json"
@@ -41,8 +37,7 @@ OptionParser.new do |opts|
 end.parse!
 
 unless File.exist?(options[:books])
-  warn "books.json not found at #{options[:books]}"
-  warn "Fetch it first: aws s3 cp s3://ucpec/data/books.json #{options[:books]}"
+  warn "books.json not found at #{options[:books]}
   exit 1
 end
 
