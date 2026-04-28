@@ -9,8 +9,7 @@
 #   ./deploy.sh --profile <aws-profile> --env stg --execute
 
 # Syncs:
-#   output/public/  -> s3://ucpec/<env>/ucpressebooks/public/
-#   output/uc/      -> s3://ucpec/<env>/ucpressebooks/uc/
+#   output/  -> s3://ucpec/<env>/ucpressebooks/
 
 set -euo pipefail
 
@@ -60,11 +59,8 @@ echo "Bucket      : $BUCKET"
 echo "Profile     : $PROFILE"
 echo ""
 
-echo "Syncing public/ ..."
-aws s3 sync "${OUTPUT_DIR}/public/" "${S3_BASE}/public/" "${SYNC_ARGS[@]}"
-
-echo "Syncing uc/ ..."
-aws s3 sync "${OUTPUT_DIR}/uc/" "${S3_BASE}/uc/" "${SYNC_ARGS[@]}"
+echo "Syncing output/ ..."
+aws s3 sync "${OUTPUT_DIR}/" "${S3_BASE}/" "${SYNC_ARGS[@]}"
 
 echo ""
 if $DRY_RUN; then
