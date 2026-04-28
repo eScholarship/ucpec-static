@@ -131,7 +131,7 @@ The `tmp/` directory is gitignored, fragments are ephemeral build artifacts.
 
 ## Part 2: Other static pages
 
-The site's browse, home, about, and help pages are generated from ERB templates by two Ruby scripts. All output is written into two subfolders of `--output-dir`: `public/` (publicly accessible content) and `uc/` (all content, for staff/internal use).
+The site's browse, home, about, and help pages are generated from ERB templates by two Ruby scripts. Output is written directly into `--output-dir` (not into the `public/` or `uc/` subfolders, which only contain book pages).
 
 ### Browse pages (`generate_browse_pages.rb`)
 
@@ -141,14 +141,14 @@ Generates browse pages from `data/books.json`.
 ruby generate_browse_pages.rb --books ./data/books.json --output-dir ./output
 ```
 
-This renders four HTML files using templates in `templates/`:
+This renders two HTML files using templates in `templates/`:
 
-| Folder | File | Description |
-|---|---|---|
-| `public/` | `browse_subject.html` | Browse by subject — publicly accessible books only |
-| `public/` | `browse_title.html` | Browse by title — publicly accessible books only |
-| `uc/` | `browse_subject.html` | Browse by subject — all books |
-| `uc/` | `browse_title.html` | Browse by title — all books |
+| File | Description |
+|---|---|
+| `browse_subject.html` | Browse by subject — all books |
+| `browse_title.html` | Browse by title — all books |
+
+Both pages list the full catalog. Links point to `public/book/` for public books and `uc/book/` for UC-only books, access control on the `uc/` path is handled by CloudFront.
 
 Options:
 
@@ -193,7 +193,7 @@ Options:
 ruby generate_static_pages.rb --output-dir ./output
 ```
 
-Renders `index.html`, `about.html`, and `help.html` from templates in `templates/`, writing them into both `public/` and `uc/` under `--output-dir`.
+Renders `index.html`, `about.html`, and `help.html` from templates in `templates/`, writing them directly into `--output-dir`.
 
 Options:
 
