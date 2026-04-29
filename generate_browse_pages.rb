@@ -36,7 +36,7 @@ OptionParser.new do |opts|
 end.parse!
 
 unless File.exist?(options[:books])
-  warn "books.json not found at #{options[:books]}
+  warn "books.json not found at #{options[:books]}"
   exit 1
 end
 
