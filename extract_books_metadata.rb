@@ -2,13 +2,10 @@
 # frozen_string_literal: true
 
 # One-time script: parses all *.mets.xml files in a local directory and writes
-# a books.json cache to S3 (or a local path for upload)
+# a books.json cache. After running, commit and push the updated file.
 
 # Usage:
 # ruby extract_books_metadata.rb --mets-dir ./tmp/book_files --output ./data/books.json
-
-# Then upload the result:
-# aws s3 cp ./data/books.json s3://ucpec/data/books.json
 
 require "nokogiri"
 require "json"
@@ -165,4 +162,3 @@ output_path.dirname.mkpath
 output_path.write(JSON.pretty_generate(books))
 
 warn "\nWrote #{books.size} books to #{output_path}"
-warn "\nNext step: aws s3 cp #{output_path} s3://ucpec/data/books.json"

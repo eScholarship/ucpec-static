@@ -129,6 +129,13 @@ aside[data-type="footnote"] {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+h1[data-type="caption"] {
+  font-size: inherit;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+
 .Heading-Heading2B {
   color: #333;
   border-bottom: 2px solid;

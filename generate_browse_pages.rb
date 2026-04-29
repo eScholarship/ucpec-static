@@ -2,15 +2,9 @@
 # frozen_string_literal: true
 
 # Generates static HTML browse pages from the books.json cache
-# Outputs two folder variants:
-# <output-dir>/public/ - public books only
-# <output-dir>/uc/ - all books (staff/internal use)
+# The browse pages list all books so users can discover the full catalog
 
 # Usage:
-# Fetch cache from S3 first:
-# aws s3 cp s3://ucpec/data/books.json ./data/books.json
-
-# Then generate pages:
 # ruby generate_browse_pages.rb --books ./data/books.json --output-dir ./output
 
 require "json"
@@ -18,19 +12,19 @@ require "optparse"
 require "pathname"
 require_relative "shared_page_helpers"
 
-def book_url(ark)
-  # TODO: Update this to the new URL
-  "http://ark.cdlib.org/ark:/13030/#{ark}/"
+def book_url(book)
+  prefix = book["public"] ? "public" : "uc"
+  "#{prefix}/book/#{slugify(book["title"])}.html"
 end
 
 def pub_info(book)
   [book["publisher"], book["year"]].compact.reject(&:empty?).join(", ")
 end
 
-# Converts a subject string to a slug for use in HTML IDs
+# Converts a string to a URL/HTML-ID-safe slug
 # (e.g. "Cinema and Performance Arts" -> "cinema-and-performance-arts")
-def subject_slug(subject)
-  subject.downcase.gsub(/[^a-z0-9]+/, "-").delete_prefix("-").delete_suffix("-")
+def slugify(str)
+  str.downcase.gsub(/[^a-z0-9]+/, "-").delete_prefix("-").delete_suffix("-")
 end
 
 options = { books: "./data/books.json", output_dir: "./output" }
@@ -43,65 +37,55 @@ end.parse!
 
 unless File.exist?(options[:books])
   warn "books.json not found at #{options[:books]}"
-  warn "Fetch it first: aws s3 cp s3://ucpec/data/books.json #{options[:books]}"
   exit 1
 end
 
-all_books    = JSON.parse(File.read(options[:books]))
-public_books = all_books.select { |b| b["public"] }
+all_books = JSON.parse(File.read(options[:books]))
 
-base_dir = Pathname.new(options[:output_dir])
+output_dir = Pathname.new(options[:output_dir])
+output_dir.mkpath
 
-variants = [
-  { dir: base_dir.join("public"), books: public_books },
-  { dir: base_dir.join("uc"),     books: all_books }
-]
-
-variants.each { |v| v[:dir].mkpath }
-
-warn "Loaded #{all_books.size} books (#{public_books.size} public)."
+warn "Loaded #{all_books.size} books."
 
 # Browse by Subject
 
 subject_template = TEMPLATES.join("browse_subject.html.erb")
 subject_css      = TEMPLATES.join("browse_subject.css")
 
-variants.each do |variant|
-  current_books = variant[:books]
-  page_title    = "Browse by Subject"
+current_books = all_books
+page_title    = "Browse by Subject"
+base_path     = ""
 
-  subjects_map = Hash.new { |h, k| h[k] = [] }
-  current_books.each do |book|
-    book["subjects"].each { |s| subjects_map[s] << book }
-  end
-  subjects_map = subjects_map.sort.to_h
-
-  html = render_with_layout(subject_template, binding, css_file: subject_css)
-  variant[:dir].join("browse_subject.html").write(html)
-  warn "Wrote #{variant[:dir].basename}/browse_subject.html (#{subjects_map.size} subjects)"
+subjects_map = Hash.new { |h, k| h[k] = [] }
+current_books.each do |book|
+  book["subjects"].each { |s| subjects_map[s] << book }
 end
+subjects_map = subjects_map.sort.to_h
+
+html = render_with_layout(subject_template, binding, css_file: subject_css)
+output_dir.join("browse_subject.html").write(html)
+warn "Wrote browse_subject.html (#{subjects_map.size} subjects)"
 
 # Browse by Title
 
 title_template = TEMPLATES.join("browse_title.html.erb")
 title_css      = TEMPLATES.join("browse_title.css")
 
-variants.each do |variant|
-  current_books = variant[:books].sort_by { |b| b["title_sort_key"] }
-  page_title    = "Browse by Title"
+current_books = all_books.sort_by { |b| b["title_sort_key"] }
+page_title    = "Browse by Title"
+base_path     = ""
 
-  books_by_letter = current_books.group_by do |b|
-    first = b["title_sort_key"].sub(/\A[^A-Z0-9]+/, "")[0]
-    first&.match?(/[A-Z]/) ? first : "Other"
-  end
-  books_by_letter = books_by_letter.sort_by { |k, _| k == "Other" ? "\xFF" : k }.to_h
-  active_letters  = books_by_letter.keys.reject { |k| k == "Other" }.sort
-  has_other       = books_by_letter.key?("Other")
-  all_letters     = ("A".."Z").to_a
-
-  html = render_with_layout(title_template, binding, css_file: title_css)
-  variant[:dir].join("browse_title.html").write(html)
-  warn "Wrote #{variant[:dir].basename}/browse_title.html (#{current_books.size} titles)"
+books_by_letter = current_books.group_by do |b|
+  first = b["title_sort_key"].sub(/\A[^A-Z0-9]+/, "")[0]
+  first&.match?(/[A-Z]/) ? first : "Other"
 end
+books_by_letter = books_by_letter.sort_by { |k, _| k == "Other" ? "\xFF" : k }.to_h
+active_letters  = books_by_letter.keys.reject { |k| k == "Other" }.sort
+has_other       = books_by_letter.key?("Other")
+all_letters     = ("A".."Z").to_a
 
-warn "\nDone. 4 pages written to #{base_dir}/ (public/ and uc/)"
+html = render_with_layout(title_template, binding, css_file: title_css)
+output_dir.join("browse_title.html").write(html)
+warn "Wrote browse_title.html (#{current_books.size} titles)"
+
+warn "\nDone. 2 pages written to #{output_dir}/"

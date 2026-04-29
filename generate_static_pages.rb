@@ -17,10 +17,8 @@ OptionParser.new do |opts|
   opts.on("--output-dir DIR", "Directory to write HTML files into") { |v| options[:output_dir] = v }
 end.parse!
 
-base_dir    = Pathname.new(options[:output_dir])
-output_dirs = [base_dir.join("public"), base_dir.join("uc")]
-
-output_dirs.each(&:mkpath)
+output_dir = Pathname.new(options[:output_dir])
+output_dir.mkpath
 
 pages = [
   { filename: "index.html", template: "home.html.erb", title: "Home" },
@@ -30,12 +28,11 @@ pages = [
 
 pages.each do |page|
   page_title = page[:title]
+  base_path  = ""
   html = render_with_layout(TEMPLATES.join(page[:template]), binding)
 
-  output_dirs.each do |dir|
-    dir.join(page[:filename]).write(html)
-    warn "Wrote #{dir.basename}/#{page[:filename]}"
-  end
+  output_dir.join(page[:filename]).write(html)
+  warn "Wrote #{page[:filename]}"
 end
 
-warn "\nDone. #{pages.size * output_dirs.size} files written to #{base_dir}/ (public/ and uc/)"
+warn "\nDone. #{pages.size} files written to #{output_dir}/"

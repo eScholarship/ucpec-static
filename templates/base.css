@@ -5,6 +5,9 @@
 body {
   margin: 0;
   padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   font-family: Georgia, serif;
   line-height: 1.6;
   color: #333;
@@ -74,6 +77,7 @@ a {
   color: white;
   text-align: center;
   padding: 3rem 0;
+  margin-top: auto;
 }
 
 .site-footer p {
