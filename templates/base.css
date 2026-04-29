@@ -47,12 +47,6 @@ a {
   margin: 0;
 }
 
-.tagline {
-  font-size: 0.9rem;
-  opacity: 0.9;
-  font-style: italic;
-}
-
 .main-nav ul {
   list-style: none;
   display: flex;
@@ -125,10 +119,6 @@ h5 {
 
 h6 {
   font-size: 1rem;
-}
-
-html {
-  scroll-behavior: smooth;
 }
 
 @media (max-width: 768px) {
