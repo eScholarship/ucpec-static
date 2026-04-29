@@ -30,11 +30,11 @@ options = { input_dir: "./tei", output_dir: "./output", books: "./data/books.jso
 
 OptionParser.new do |opts|
   opts.banner = "Usage: ruby convert_books.rb [options]"
-  opts.on("--input-dir DIR",    "Directory of TEI XML files (default: ./tei)")          { |v| options[:input_dir] = v }
-  opts.on("--output-dir DIR",   "Base output directory (default: ./output)")             { |v| options[:output_dir] = v }
-  opts.on("--books FILE",       "Path to books.json cache (default: ./data/books.json)") { |v| options[:books] = v }
-  opts.on("--workers N",        "Number of parallel workers (default: 4)", Integer)      { |v| options[:workers] = v }
-  opts.on("--skip-conversion",  "Skip Step 1 and re-use existing tmp/fragments/ cache")  { options[:skip_conversion] = true }
+  opts.on("--input-dir DIR", "Directory of TEI XML files (default: ./tei)") { |v| options[:input_dir] = v }
+  opts.on("--output-dir DIR", "Base output directory (default: ./output)") { |v| options[:output_dir] = v }
+  opts.on("--books FILE", "Path to books.json cache (default: ./data/books.json)") { |v| options[:books] = v }
+  opts.on("--workers N", "Number of parallel workers (default: 4)", Integer) { |v| options[:workers] = v }
+  opts.on("--skip-conversion", "Skip Step 1 and re-use existing tmp/fragments/ cache") { options[:skip_conversion] = true }
 end.parse!
 
 unless File.exist?(options[:books])
