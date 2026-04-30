@@ -148,7 +148,7 @@ This renders two HTML files using templates in `templates/`:
 | `browse_subject.html` | Browse by subject — all books |
 | `browse_title.html` | Browse by title — all books |
 
-Both pages list the full catalog. Links point to `public/book/` for public books and `uc/book/` for UC-only books, access control on the `uc/` path is handled by CloudFront.
+Both pages list the full catalog with clean URLs (e.g. `book/slug.html`). CloudFront routes users to the appropriate folder (`public/` or `uc/`) based on credentials.
 
 Options:
 
