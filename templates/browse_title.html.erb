@@ -28,6 +28,7 @@
             <div>
               <div class="book-title">
                 <a href="<%= book_url(book) %>"><%= h(book["title"]) %></a>
+                <% if book["public"] -%><span class="public-badge">public</span><% end -%>
               </div>
               <div class="book-meta">
                 <% if book["author"] && !book["author"].empty? -%>

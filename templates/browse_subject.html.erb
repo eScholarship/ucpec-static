@@ -13,10 +13,11 @@
         <ul>
           <% books_in_subject.sort_by { |b| b["title_sort_key"] }.each do |book| -%>
           <li>
-            <img class="book-list-cover" src="https://ucpec.s3.amazonaws.com/book_files/<%= book["ark"] %>/figures/<%= book["ark"] %>_cover.jpg" alt="Cover of <%= h(book["title"]) %>" loading="lazy" onerror="this.style.display='none'">
+            <img class="book-list-cover" src="https://ucpec.s3.amazonaws.com/book_files/<%= book["ark"] %>/figures/<%= book["ark"] %>_cover.jpg" alt="Cover of <%= h(book["title"]) %>" width="150" height="225" loading="lazy" onerror="this.style.visibility='hidden'">
             <div>
               <div class="book-title">
                 <a href="<%= book_url(book) %>"><%= h(book["title"]) %></a>
+                <% if book["public"] -%><span class="public-badge">public</span><% end -%>
               </div>
               <div class="book-meta">
                 <% if book["author"] && !book["author"].empty? -%>
