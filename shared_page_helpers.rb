@@ -16,9 +16,10 @@ def render(template_path, b)
   ERB.new(File.read(template_path), trim_mode: "-").result(b)
 end
 
-def render_with_layout(inner_template, b, css_file: nil)
+def render_with_layout(inner_template, b, css_file: nil, js_file: nil)
   b.local_variable_set(:page_content, render(inner_template, b))
   b.local_variable_set(:page_css,     css_file ? File.read(css_file) : "")
+  b.local_variable_set(:page_js,      js_file  ? File.read(js_file)  : "")
   b.local_variable_set(:base_css,     File.read(TEMPLATES.join("base.css")))
   render(TEMPLATES.join("_layout.html.erb"), b)
 end

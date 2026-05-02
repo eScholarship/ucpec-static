@@ -2,8 +2,14 @@
     <div class="container">
       <div class="browse-header">
         <h1><%= h(page_title) %></h1>
-        <p><%= current_books.size %> titles. Jump to a letter or scroll to browse.</p>
+        <p><span class="browse-visible-count"><%= current_books.size %></span> titles. Jump to a letter or scroll to browse.</p>
       </div>
+
+      <fieldset class="browse-filter">
+        <legend>Filter by access</legend>
+        <label><input type="radio" name="visibility-filter" value="all" checked> All</label>
+        <label><input type="radio" name="visibility-filter" value="public"> Public</label>
+      </fieldset>
 
       <nav class="alpha-nav" aria-label="Alphabetical navigation">
         <% all_letters.each do |letter| -%>
@@ -23,7 +29,7 @@
         <h2><%= h(letter) %></h2>
         <ul class="book-list">
           <% books_in_section.each do |book| -%>
-          <li>
+          <li data-public="<%= book["public"] ? 'true' : 'false' %>">
             <img class="book-list-cover" src="https://ucpec.s3.amazonaws.com/book_files/<%= book["ark"] %>/figures/<%= book["ark"] %>_cover.jpg" alt="Cover of <%= h(book["title"]) %>" width="150" height="225" loading="lazy" onerror="this.style.visibility='hidden'">
             <div>
               <div class="book-title">

@@ -66,6 +66,37 @@
 }
 
 <%= page_css %>
+
+/* Browse filter */
+
+[hidden] { display: none !important; }
+
+.browse-filter {
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.browse-filter legend {
+  float: left;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.browse-filter label {
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.alpha-nav__inactive {
+  opacity: 0.35;
+  pointer-events: none;
+}
   </style>
 </head>
 <body>
@@ -100,5 +131,8 @@
       <p>&copy; 2025 The Regents of the University of California</p>
     </div>
   </footer>
+<% if page_js && !page_js.empty? -%>
+  <script><%= page_js %></script>
+<% end -%>
 </body>
 </html>

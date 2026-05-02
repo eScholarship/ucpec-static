@@ -50,6 +50,7 @@ warn "Loaded #{all_books.size} books."
 
 subject_template = TEMPLATES.join("browse_subject.html.erb")
 subject_css      = TEMPLATES.join("browse_subject.css")
+browse_filter_js = TEMPLATES.join("browse_filter.js")
 
 current_books = all_books
 page_title    = "Browse by Subject"
@@ -61,7 +62,7 @@ current_books.each do |book|
 end
 subjects_map = subjects_map.sort.to_h
 
-html = render_with_layout(subject_template, binding, css_file: subject_css)
+html = render_with_layout(subject_template, binding, css_file: subject_css, js_file: browse_filter_js)
 output_dir.join("browse_subject.html").write(html)
 warn "Wrote browse_subject.html (#{subjects_map.size} subjects)"
 
@@ -83,7 +84,7 @@ active_letters  = books_by_letter.keys.reject { |k| k == "Other" }.sort
 has_other       = books_by_letter.key?("Other")
 all_letters     = ("A".."Z").to_a
 
-html = render_with_layout(title_template, binding, css_file: title_css)
+html = render_with_layout(title_template, binding, css_file: title_css, js_file: browse_filter_js)
 output_dir.join("browse_title.html").write(html)
 warn "Wrote browse_title.html (#{current_books.size} titles)"
 
