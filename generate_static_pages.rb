@@ -21,7 +21,7 @@ output_dir = Pathname.new(options[:output_dir])
 output_dir.mkpath
 
 pages = [
-  { filename: "index.html", template: "home.html.erb", title: "Home" },
+  { filename: "index.html", template: "home.html.erb", title: "Home", css: "home.css" },
   { filename: "about.html", template: "about.html.erb", title: "About" },
   { filename: "help.html", template: "help.html.erb", title: "Help" }
 ]
@@ -29,7 +29,8 @@ pages = [
 pages.each do |page|
   page_title = page[:title]
   base_path  = ""
-  html = render_with_layout(TEMPLATES.join(page[:template]), binding)
+  css_file   = page[:css] ? TEMPLATES.join(page[:css]) : nil
+  html = render_with_layout(TEMPLATES.join(page[:template]), binding, css_file: css_file)
 
   output_dir.join(page[:filename]).write(html)
   warn "Wrote #{page[:filename]}"
