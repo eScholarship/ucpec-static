@@ -10,8 +10,24 @@
 
     controls.addEventListener('change', e => {
       if (e.target.name !== 'visibility-filter') return
-      applyFilter(e.target.value)
+      const value = e.target.value
+      const url = new URL(location.href)
+      if (value === 'all') {
+        url.searchParams.delete('filter')
+      } else {
+        url.searchParams.set('filter', value)
+      }
+      history.replaceState(null, '', url)
+      applyFilter(value)
     })
+
+    // Apply filter from URL on page load
+    const initialFilter = new URL(location.href).searchParams.get('filter') || 'all'
+    if (initialFilter !== 'all') {
+      const radio = controls.querySelector(`input[value="${initialFilter}"]`)
+      if (radio) radio.checked = true
+      applyFilter(initialFilter)
+    }
 
     function applyFilter(value) {
       items.forEach(li => {
