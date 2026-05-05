@@ -9,6 +9,7 @@
 .home-sidebar {
   border-right: 1px solid #dee2e6;
   padding-right: 1rem;
+  max-width: 250px;
 }
 
 .home-sidebar h3 {
