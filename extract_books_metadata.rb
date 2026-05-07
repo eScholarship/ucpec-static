@@ -125,8 +125,6 @@ def parse_mets_mods_fallback(doc, mods)
     "year"            => year,
     "date_issued"     => date_issued,
     "description"     => nil,
-    "author_bio"      => nil,
-    "series"          => nil,
     "toc"             => parse_toc(doc)
   }
 end
@@ -156,8 +154,6 @@ def parse_mets(file)
     "year"            => year,
     "date_issued"     => date_issued,
     "description"     => data_of(ucp, "UCPnum.Copy"),
-    "author_bio"      => data_of(ucp, "UCPnum.AuthorBioInCatalog"),
-    "series"          => data_of(ucp, "UCPnum.Series_name"),
     "toc"             => parse_toc(doc)
   }
 end
