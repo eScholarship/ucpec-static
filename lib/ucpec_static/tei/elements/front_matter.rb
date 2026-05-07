@@ -98,13 +98,13 @@ module UCPECStatic
           date_str  = raw_date.start_with?("c") ? "#{raw_date} #{year}" : year
 
           wrap_with_tag!("aside", class: "preferred-citation") do
-            wrap_with_tag!("p") do
+            wrap_with_tag!("span") do
               wrap_with_tag!("strong") { html_builder.text "Preferred Citation:" }
               html_builder.text " #{author} " unless author.empty?
               wrap_with_tag!("cite") { html_builder.text title } unless title.empty?
               html_builder.text ". " unless title.empty?
               location = [place, publisher].reject(&:empty?).join(":  ")
-              html_builder.text "#{location},  #{date_str}." unless location.empty?
+              html_builder.text "#{location},  #{date_str}. http://ark.cdlib.org/ark:/13030" unless location.empty?
             end
           end
         end
