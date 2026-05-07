@@ -14,6 +14,7 @@ module UCPECStatic
         extend Dry::Core::ClassAttributes
 
         include UCPECStatic::HasConfig
+        include UCPECStatic::Pipeline::Ext::ReadsBookMetadata
         include Dry::Core::Constants
         include Dry::Core::Equalizer.new(:node_id)
         include Dry::Core::Memoizable

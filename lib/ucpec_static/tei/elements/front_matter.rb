@@ -19,6 +19,7 @@ module UCPECStatic
           wrap_with_tag!(html_tag) do
             render_title_section!
             render_dedications!
+            render_preferred_citation!
             render_table_of_contents! if has_chapters?
             render_other_front_matter!
           end
@@ -143,6 +144,32 @@ module UCPECStatic
             title: heading_text,
             level: div_element.level
           }
+        end
+
+        # Render the preferred citation block if book metadata is available
+        # @return [void]
+        def render_preferred_citation!
+          meta = book_metadata
+          return if meta.nil?
+
+          author    = meta["author_citation"].to_s
+          title     = meta["title"].to_s
+          place     = meta["place"].to_s
+          publisher = meta["publisher"].to_s
+          year      = meta["year"].to_s
+          raw_date  = meta["date_issued"].to_s
+          date_str  = raw_date.start_with?("c") ? "#{raw_date} #{year}" : year
+
+          wrap_with_tag!("aside", class: "preferred-citation") do
+            wrap_with_tag!("p") do
+              wrap_with_tag!("strong") { html_builder.text "Preferred Citation:" }
+              html_builder.text " #{author} " unless author.empty?
+              wrap_with_tag!("cite") { html_builder.text title } unless title.empty?
+              html_builder.text ". " unless title.empty?
+              location = [place, publisher].reject(&:empty?).join(":  ")
+              html_builder.text "#{location},  #{date_str}." unless location.empty?
+            end
+          end
         end
 
         # Render the table of contents navigation

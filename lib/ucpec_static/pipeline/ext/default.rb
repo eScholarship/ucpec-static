@@ -5,6 +5,7 @@ module UCPECStatic
     module Ext
       module Default
         include CapturesPipelineResult
+        include ReadsBookMetadata
         include ReadsCurrentEnv
         include ReadsCurrentJob
       end

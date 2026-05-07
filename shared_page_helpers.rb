@@ -19,7 +19,7 @@ end
 def render_with_layout(inner_template, b, css_file: nil, js_file: nil)
   b.local_variable_set(:page_content, render(inner_template, b))
   b.local_variable_set(:page_css,     Array(css_file).compact.map { |f| File.read(f) }.join("\n"))
-  b.local_variable_set(:page_js,      js_file  ? File.read(js_file)  : "")
+  b.local_variable_set(:page_js,      js_file ? File.read(js_file) : "")
   b.local_variable_set(:base_css,     File.read(TEMPLATES.join("base.css")))
   render(TEMPLATES.join("_layout.html.erb"), b)
 end

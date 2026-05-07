@@ -65,10 +65,12 @@ def mods_year(origin)
   year
 end
 
-def mods_publisher_year(mods_node)
+def mods_origin_info(mods_node)
   origin = mods_node&.at_xpath("mods:originInfo", NS)
-  publisher = origin&.at_xpath("mods:publisher", NS)&.text&.strip
-  [publisher, mods_year(origin)]
+  publisher   = origin&.at_xpath("mods:publisher", NS)&.text&.strip
+  place       = origin&.at_xpath("mods:place/mods:text", NS)&.text&.strip
+  date_issued = origin&.at_xpath("mods:dateIssued[not(@encoding)]", NS)&.text&.strip
+  [publisher, mods_year(origin), place, date_issued]
 end
 
 def parse_subjects(ucp)
@@ -84,20 +86,23 @@ def parse_mets_mods_fallback(doc, mods)
   ark = doc.root["OBJID"].to_s.split("/").last.strip
   title = mods_title(mods)
   author = mods_author(mods)
-  publisher, year = mods_publisher_year(mods)
+  publisher, year, place, date_issued = mods_origin_info(mods)
 
   {
-    "ark"            => ark,
-    "title"          => title,
-    "title_sort_key" => title_sort_key(title),
-    "author"         => author,
-    "subjects"       => [],
-    "public"         => true,
-    "publisher"      => publisher,
-    "year"           => year,
-    "description"    => nil,
-    "author_bio"     => nil,
-    "series"         => nil
+    "ark"             => ark,
+    "title"           => title,
+    "title_sort_key"  => title_sort_key(title),
+    "author"          => author,
+    "author_citation" => author,
+    "subjects"        => [],
+    "public"          => true,
+    "publisher"       => publisher,
+    "place"           => place,
+    "year"            => year,
+    "date_issued"     => date_issued,
+    "description"     => nil,
+    "author_bio"      => nil,
+    "series"          => nil
   }
 end
 
@@ -111,20 +116,23 @@ def parse_mets(file)
   return nil if ucp.nil?
 
   ark = data_of(ucp, "ARK.ARK").to_s.split("/").last.to_s.strip
-  publisher, year = mods_publisher_year(mods)
+  publisher, year, place, date_issued = mods_origin_info(mods)
 
   {
-    "ark"            => ark,
-    "title"          => data_of(ucp, "UCPnum.Title"),
-    "title_sort_key" => title_sort_key(data_of(ucp, "UCPnum.TitleMain")),
-    "author"         => data_of(ucp, "UCPnum.AUTHOR_CITATION_FWD"),
-    "subjects"       => parse_subjects(ucp),
-    "public"         => text_of(ucp, "public_nonPublic") == "Public",
-    "publisher"      => publisher,
-    "year"           => year,
-    "description"    => data_of(ucp, "UCPnum.Copy"),
-    "author_bio"     => data_of(ucp, "UCPnum.AuthorBioInCatalog"),
-    "series"         => data_of(ucp, "UCPnum.Series_name")
+    "ark"             => ark,
+    "title"           => data_of(ucp, "UCPnum.Title"),
+    "title_sort_key"  => title_sort_key(data_of(ucp, "UCPnum.TitleMain")),
+    "author"          => data_of(ucp, "UCPnum.AUTHOR_CITATION_FWD"),
+    "author_citation" => data_of(ucp, "UCPnum.AUTHOR_CITATION"),
+    "subjects"        => parse_subjects(ucp),
+    "public"          => text_of(ucp, "public_nonPublic") == "Public",
+    "publisher"       => publisher,
+    "place"           => place,
+    "year"            => year,
+    "date_issued"     => date_issued,
+    "description"     => data_of(ucp, "UCPnum.Copy"),
+    "author_bio"      => data_of(ucp, "UCPnum.AuthorBioInCatalog"),
+    "series"          => data_of(ucp, "UCPnum.Series_name")
   }
 end
 
