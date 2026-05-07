@@ -80,6 +80,30 @@ def parse_subjects(ucp)
   end.uniq
 end
 
+# Types that are structural containers or decorative (excluded from the TOC)
+EXCLUDED_TOC_TYPES = %w[TEI.2 text front body back dedication epigraph halftitle subtitle contents].freeze
+
+# Parses the structMap to produce an ordered TOC array: [{"id" => ..., "label" => ...}]
+def parse_toc(doc)
+  struct = doc.at_css("structMap")
+  return [] unless struct
+
+  struct.css("div[LABEL]").filter_map do |div|
+    next if EXCLUDED_TOC_TYPES.include?(div["TYPE"])
+
+    fptr = div.at_css("fptr")
+    next unless fptr
+
+    file_id = fptr["FILEID"]
+    next if file_id == "top"
+
+    label = div["LABEL"].gsub(/[[:space:]]+/, " ").strip
+    next if label.empty?
+
+    { "id" => file_id, "label" => label }
+  end
+end
+
 # Fallback parser for METS files that have only a mods dmdSec (no ucpress dmdSec)
 # A handful of METS files were "built using MODS records provided by UCSD"
 def parse_mets_mods_fallback(doc, mods)
@@ -102,7 +126,8 @@ def parse_mets_mods_fallback(doc, mods)
     "date_issued"     => date_issued,
     "description"     => nil,
     "author_bio"      => nil,
-    "series"          => nil
+    "series"          => nil,
+    "toc"             => parse_toc(doc)
   }
 end
 
@@ -132,7 +157,8 @@ def parse_mets(file)
     "date_issued"     => date_issued,
     "description"     => data_of(ucp, "UCPnum.Copy"),
     "author_bio"      => data_of(ucp, "UCPnum.AuthorBioInCatalog"),
-    "series"          => data_of(ucp, "UCPnum.Series_name")
+    "series"          => data_of(ucp, "UCPnum.Series_name"),
+    "toc"             => parse_toc(doc)
   }
 end
 

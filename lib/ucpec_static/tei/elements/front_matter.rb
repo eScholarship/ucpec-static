@@ -79,71 +79,8 @@ module UCPECStatic
         # Collect all ToC-worthy sections from front matter, body, and back matter
         # @return [void]
         def collect_chapters!
-          @chapters = []
-
-          # Find the root element by traversing ancestors
-          root_element = closest { |node| node.kind_of?(Root) }
-          return unless root_element
-
-          collect_front_matter_chapters!
-          collect_body_chapters!(root_element)
-          collect_back_matter_chapters!(root_element)
-        end
-
-        # Collect chapters from front matter (prefaces, acknowledgments, etc.)
-        # @return [void]
-        def collect_front_matter_chapters!
-          children.each do |child|
-            next unless child.kind_of?(Division)
-            next unless child.xml_attributes["type"] == "fmsec"
-            add_to_chapters(child)
-          end
-        end
-
-        # Collect chapters from body
-        # @param [Root] root_element
-        # @return [void]
-        def collect_body_chapters!(root_element)
-          body_element = root_element.find_first_descendant { |node| node.kind_of?(Body) }
-          body_element&.traverse do |node|
-            next unless node.kind_of?(Division)
-            next unless node.xml_attributes["type"] == "chapter"
-            add_to_chapters(node)
-          end
-        end
-
-        # Collect chapters from back matter (notes, chronology, glossary, index)
-        # @param [Root] root_element
-        # @return [void]
-        def collect_back_matter_chapters!(root_element)
-          back_element = root_element.find_first_descendant { |node| node.kind_of?(BackMatter) }
-          back_element&.children&.each do |child|
-            next unless child.kind_of?(Division)
-            type = child.xml_attributes["type"]
-            next unless ["bmsec", "glossary", "index"].include?(type)
-            add_to_chapters(child)
-          end
-        end
-
-        # Helper method to add a division to chapters array
-        # @param [Division] div_element
-        # @return [void]
-        def add_to_chapters(div_element)
-          chapter_id = div_element.xml_attributes["id"]
-          return if chapter_id.blank?
-
-          # Find the heading within this section
-          heading = div_element.find_first_descendant { |child| child.kind_of?(Heading) }
-          return unless heading
-
-          # Extract the heading text
-          heading_text = heading.node.text.strip
-
-          @chapters << {
-            id: chapter_id,
-            title: heading_text,
-            level: div_element.level
-          }
+          meta = book_metadata
+          @chapters = meta&.dig("toc")&.map { |entry| { id: entry["id"], title: entry["label"] } } || []
         end
 
         # Render the preferred citation block if book metadata is available
