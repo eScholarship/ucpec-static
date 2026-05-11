@@ -70,7 +70,6 @@ else
   # the container's filesystem
   ok = system(
     "docker", "run", "--rm",
-    "-e", "RUBY_FIBER_VM_STACK_SIZE=8388608",
     "-v", "#{input_dir}:/data/input",
     "-v", "#{fragment_dir.realpath}:/data/output",
     "-v", "#{Pathname.new(options[:books]).realpath}:/data/books.json:ro",
