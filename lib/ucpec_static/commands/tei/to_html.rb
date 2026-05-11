@@ -24,7 +24,10 @@ module UCPECStatic
 
         def perform(tei_path:, books: nil, **)
           run_job(job_klass, tei_path: Pathname.new(tei_path), books_path: books ? Pathname.new(books) : nil) do |m|
-            m.success { |result| on_success! result }
+            m.success do |result|
+              logger.debug("Pipeline complete")
+              on_success! result
+            end
             m.failure do |*err|
               # :nocov:
               warn Paint["Something went wrong!", :red, :bright]

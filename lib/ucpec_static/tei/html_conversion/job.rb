@@ -16,7 +16,7 @@ module UCPECStatic
         include Dry::Effects::Handler.Reader(:book_metadata)
 
         option :tei_path, Types::Path
-        option :books_path, Types::Path.optional, default: proc { nil }
+        option :books_path, Types::Path.optional, default: proc {}
 
         build_job! do |job|
           source UCPECStatic::TEI::HTMLConversion::Source, job.tei_path

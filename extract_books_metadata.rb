@@ -65,11 +65,18 @@ def mods_year(origin)
   year
 end
 
+def mods_origin_fields(origin)
+  publisher   = origin.at_xpath("mods:publisher", NS)&.text&.strip
+  place       = origin.at_xpath("mods:place/mods:text", NS)&.text&.strip
+  date_issued = origin.at_xpath("mods:dateIssued[not(@encoding)]", NS)&.text&.strip
+  [publisher, place, date_issued]
+end
+
 def mods_origin_info(mods_node)
   origin = mods_node&.at_xpath("mods:originInfo", NS)
-  publisher   = origin&.at_xpath("mods:publisher", NS)&.text&.strip
-  place       = origin&.at_xpath("mods:place/mods:text", NS)&.text&.strip
-  date_issued = origin&.at_xpath("mods:dateIssued[not(@encoding)]", NS)&.text&.strip
+  return [nil, nil, nil, nil] if origin.nil?
+
+  publisher, place, date_issued = mods_origin_fields(origin)
   [publisher, mods_year(origin), place, date_issued]
 end
 

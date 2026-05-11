@@ -89,6 +89,14 @@ module UCPECStatic
           meta = book_metadata
           return if meta.nil?
 
+          wrap_with_tag!("aside", class: "preferred-citation") do
+            wrap_with_tag!("span") { render_citation_text!(meta) }
+          end
+        end
+
+        # Render the text content of the preferred citation
+        # @return [void]
+        def render_citation_text!(meta)
           author    = meta["author_citation"].to_s
           title     = meta["title"].to_s
           place     = meta["place"].to_s
@@ -97,16 +105,12 @@ module UCPECStatic
           raw_date  = meta["date_issued"].to_s
           date_str  = raw_date.start_with?("c") ? "#{raw_date} #{year}" : year
 
-          wrap_with_tag!("aside", class: "preferred-citation") do
-            wrap_with_tag!("span") do
-              wrap_with_tag!("strong") { html_builder.text "Preferred Citation:" }
-              html_builder.text " #{author}. " unless author.empty?
-              wrap_with_tag!("cite") { html_builder.text title } unless title.empty?
-              html_builder.text ". " unless title.empty?
-              location = [place, publisher].reject(&:empty?).join(":  ")
-              html_builder.text "#{location},  #{date_str}. http://ark.cdlib.org/ark:/13030" unless location.empty?
-            end
-          end
+          wrap_with_tag!("strong") { html_builder.text "Preferred Citation:" }
+          html_builder.text " #{author}. " unless author.empty?
+          wrap_with_tag!("cite") { html_builder.text title } unless title.empty?
+          html_builder.text ". " unless title.empty?
+          location = [place, publisher].reject(&:empty?).join(":  ")
+          html_builder.text "#{location},  #{date_str}. http://ark.cdlib.org/ark:/13030" unless location.empty?
         end
 
         # Render the table of contents navigation
