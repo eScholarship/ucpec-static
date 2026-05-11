@@ -100,7 +100,7 @@ module UCPECStatic
           wrap_with_tag!("aside", class: "preferred-citation") do
             wrap_with_tag!("span") do
               wrap_with_tag!("strong") { html_builder.text "Preferred Citation:" }
-              html_builder.text " #{author} " unless author.empty?
+              html_builder.text " #{author}. " unless author.empty?
               wrap_with_tag!("cite") { html_builder.text title } unless title.empty?
               html_builder.text ". " unless title.empty?
               location = [place, publisher].reject(&:empty?).join(":  ")

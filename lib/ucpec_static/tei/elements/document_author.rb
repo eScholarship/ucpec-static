@@ -7,7 +7,7 @@ module UCPECStatic
       class DocumentAuthor < UCPECStatic::TEI::Nodes::Element
         matches_tei_tag! "docAuthor"
 
-        uses_html_tag! "span"
+        uses_html_tag! "p"
       end
     end
   end
