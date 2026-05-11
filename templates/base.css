@@ -47,6 +47,18 @@ a {
   margin: 0;
 }
 
+.header-logos {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.header-logo {
+  height: 3rem;
+  width: auto;
+}
+
 .main-nav ul {
   list-style: none;
   display: flex;
