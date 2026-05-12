@@ -32,7 +32,9 @@
   margin: 1em;
 }
 
-p[data-tei-tag="docAuthor"], div[data-type="copyright"] p {
+p[data-tei-tag="docAuthor"], 
+div[data-type="copyright"] p,
+.preferred-citation p {
   text-indent: 0;
 }
 
