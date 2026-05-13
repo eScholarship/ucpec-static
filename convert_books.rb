@@ -109,7 +109,7 @@ fragments.each_with_index do |fragment, i|
 
   tei_content = fragment.read
   page_title  = nil
-  base_path   = "../"
+  base_path   = "../../"
   html = render_with_layout(TEMPLATES.join("book.html.erb"), binding, css_file: book_css)
 
   # All books go into uc/
