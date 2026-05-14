@@ -18,6 +18,7 @@ module UCPECStatic
         def render_html
           wrap_with_tag!(html_tag) do
             render_title_section!
+            render_preferred_citation!
             render_dedications!
             render_table_of_contents! if has_chapters?
             render_other_front_matter!
@@ -78,71 +79,40 @@ module UCPECStatic
         # Collect all ToC-worthy sections from front matter, body, and back matter
         # @return [void]
         def collect_chapters!
-          @chapters = []
-
-          # Find the root element by traversing ancestors
-          root_element = closest { |node| node.kind_of?(Root) }
-          return unless root_element
-
-          collect_front_matter_chapters!
-          collect_body_chapters!(root_element)
-          collect_back_matter_chapters!(root_element)
+          meta = book_metadata
+          @chapters = meta&.dig("toc")&.map { |entry| { id: entry["id"], title: entry["label"] } } || []
         end
 
-        # Collect chapters from front matter (prefaces, acknowledgments, etc.)
+        # Render the preferred citation block if book metadata is available
         # @return [void]
-        def collect_front_matter_chapters!
-          children.each do |child|
-            next unless child.kind_of?(Division)
-            next unless child.xml_attributes["type"] == "fmsec"
-            add_to_chapters(child)
+        def render_preferred_citation!
+          meta = book_metadata
+          return if meta.nil?
+
+          wrap_with_tag!("aside", class: "preferred-citation") do
+            wrap_with_tag!("p") { render_citation_text!(meta) }
+            html_builder.hr
           end
         end
 
-        # Collect chapters from body
-        # @param [Root] root_element
+        # Render the text content of the preferred citation
         # @return [void]
-        def collect_body_chapters!(root_element)
-          body_element = root_element.find_first_descendant { |node| node.kind_of?(Body) }
-          body_element&.traverse do |node|
-            next unless node.kind_of?(Division)
-            next unless node.xml_attributes["type"] == "chapter"
-            add_to_chapters(node)
-          end
-        end
+        def render_citation_text!(meta)
+          author    = meta["author_citation"].to_s
+          title     = meta["title"].to_s
+          place     = meta["place"].to_s
+          publisher = meta["publisher"].to_s
+          year      = meta["year"].to_s
+          raw_date  = meta["date_issued"].to_s
+          ark       = meta["ark"].to_s
+          date_str  = raw_date.start_with?("c") ? "#{raw_date} #{year}" : year
 
-        # Collect chapters from back matter (notes, chronology, glossary, index)
-        # @param [Root] root_element
-        # @return [void]
-        def collect_back_matter_chapters!(root_element)
-          back_element = root_element.find_first_descendant { |node| node.kind_of?(BackMatter) }
-          back_element&.children&.each do |child|
-            next unless child.kind_of?(Division)
-            type = child.xml_attributes["type"]
-            next unless ["bmsec", "glossary", "index"].include?(type)
-            add_to_chapters(child)
-          end
-        end
-
-        # Helper method to add a division to chapters array
-        # @param [Division] div_element
-        # @return [void]
-        def add_to_chapters(div_element)
-          chapter_id = div_element.xml_attributes["id"]
-          return if chapter_id.blank?
-
-          # Find the heading within this section
-          heading = div_element.find_first_descendant { |child| child.kind_of?(Heading) }
-          return unless heading
-
-          # Extract the heading text
-          heading_text = heading.node.text.strip
-
-          @chapters << {
-            id: chapter_id,
-            title: heading_text,
-            level: div_element.level
-          }
+          html_builder.text "Preferred Citation: "
+          html_builder.text "#{author}. " unless author.empty?
+          wrap_with_tag!("cite") { html_builder.text title } unless title.empty?
+          html_builder.text ". " unless title.empty?
+          location = [place, publisher].reject(&:empty?).join(":  ")
+          html_builder.text "#{location},  #{date_str}. http://ark.cdlib.org/ark:/13030/#{ark}" unless location.empty?
         end
 
         # Render the table of contents navigation

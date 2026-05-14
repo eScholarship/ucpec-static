@@ -1,0 +1,88 @@
+/* Shared styles for all browse pages (subject + title) */
+
+[hidden] { display: none !important; }
+
+.browse-header {
+  margin-bottom: 2rem;
+}
+
+.browse-header p {
+  color: #666;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  text-indent: 0;
+}
+
+.book-title a {
+  color: #62708d;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.book-title a:hover {
+  text-decoration: underline;
+}
+
+.book-meta {
+  margin-top: 0.2rem;
+}
+
+.book-pub {
+  font-style: italic;
+  color: #777;
+}
+
+.public-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #3a3f44;
+  background: #e9ecef;
+  border: 1px solid #ced4da;
+  border-radius: 3px;
+  padding: 0.15em 0.45em;
+  vertical-align: middle;
+  margin-left: 0.2rem;
+  white-space: nowrap;
+}
+
+.book-list-cover {
+  width: 150px;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  flex-shrink: 0;
+  align-self: flex-start;
+  display: block;
+}
+
+/* Visibility filter */
+
+.browse-filter {
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.browse-filter legend {
+  float: left;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.browse-filter label {
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.alpha-nav__inactive {
+  opacity: 0.35;
+  pointer-events: none;
+}

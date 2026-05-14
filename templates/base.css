@@ -19,7 +19,7 @@ a {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 20px;
 }
@@ -47,10 +47,20 @@ a {
   margin: 0;
 }
 
-.tagline {
-  font-size: 0.9rem;
-  opacity: 0.9;
-  font-style: italic;
+.header-logos {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.header-logo {
+  height: 3rem;
+  width: auto;
+}
+
+.header-logo.cdl {
+  background: #fff;
 }
 
 .main-nav ul {
@@ -85,7 +95,7 @@ a {
 }
 
 .site-footer a {
-  color: #3498db;
+  color: #ccc;
 }
 
 .footer-links {
@@ -127,10 +137,6 @@ h6 {
   font-size: 1rem;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 @media (max-width: 768px) {
   .main-nav ul {
     gap: 1rem;
@@ -162,5 +168,13 @@ html {
 
   .brand-container {
     text-align: center;
+  }
+
+  .header-logos {
+    justify-content: center;
+  }
+
+  .header-logo {
+    height: 2rem;
   }
 }

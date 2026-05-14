@@ -2,48 +2,58 @@
     <div class="container">
       <div class="browse-header">
         <h1><%= h(page_title) %></h1>
-        <p><%= current_books.size %> titles. Jump to a letter or scroll to browse.</p>
+        <p><span class="browse-visible-count"><%= current_books.size %></span> titles. Jump to a letter or scroll to browse.</p>
       </div>
+
+      <fieldset class="browse-filter">
+        <legend>Filter by access</legend>
+        <label><input type="radio" name="visibility-filter" value="all" checked> All</label>
+        <label><input type="radio" name="visibility-filter" value="public"> Public</label>
+      </fieldset>
 
       <nav class="alpha-nav" aria-label="Alphabetical navigation">
         <% all_letters.each do |letter| -%>
-        <% if active_letters.include?(letter) -%>
-        <a href="#letter-<%= letter %>"><%= letter %></a>
-        <% else -%>
-        <span aria-hidden="true"><%= letter %></span>
+          <% if active_letters.include?(letter) -%>
+            <a href="#letter-<%= letter %>"><%= letter %></a>
+          <% else -%>
+            <span aria-hidden="true"><%= letter %></span>
+          <% end -%>
         <% end -%>
-        <% end -%>
+
         <% if has_other -%>
-        <a href="#letter-Other">Other</a>
+          <a href="#letter-Other">Other</a>
         <% end -%>
       </nav>
 
       <% books_by_letter.each do |letter, books_in_section| -%>
-      <section class="letter-section" id="letter-<%= letter %>">
-        <h2><%= h(letter) %></h2>
-        <ul class="book-list">
-          <% books_in_section.each do |book| -%>
-          <li>
-            <img class="book-list-cover" src="https://ucpec.s3.amazonaws.com/book_files/<%= book["ark"] %>/figures/<%= book["ark"] %>_cover.jpg" alt="Cover of <%= h(book["title"]) %>" loading="lazy" onerror="this.style.display='none'">
-            <div>
-              <div class="book-title">
-                <a href="<%= book_url(book) %>"><%= h(book["title"]) %></a>
-              </div>
-              <div class="book-meta">
-                <% if book["author"] && !book["author"].empty? -%>
-                <%= h(book["author"]) %>
-                <% end -%>
-                <% info = pub_info(book) -%>
-                <% unless info.empty? -%>
-                &mdash; <span class="book-pub"><%= h(info) %></span>
-                <% end -%>
-              </div>
-            </div>
-          </li>
-          <% end -%>
-        </ul>
-        <a href="#top" class="back-to-top">&#8593; Back to top</a>
-      </section>
+        <section class="letter-section" id="letter-<%= letter %>">
+          <h2><%= h(letter) %></h2>
+          <ul class="book-list">
+            <% books_in_section.each do |book| -%>
+              <li data-public="<%= book["public"] ? 'true' : 'false' %>">
+                <img class="book-list-cover" src="/img/<%= book["ark"] %>_cover.jpg" alt="" width="150" height="225" loading="lazy" onerror="this.style.visibility='hidden'">
+                <div>
+                  <div class="book-title">
+                    <a href="<%= book_url(book) %>"><%= h(book["title"]) %></a>
+                    <% if book["public"] -%>
+                      <span class="public-badge">public</span>
+                    <% end -%>
+                  </div>
+                  <div class="book-meta">
+                    <% if book["author"] && !book["author"].empty? -%>
+                      <%= h(book["author"]) %>
+                    <% end -%>
+                    <% info = pub_info(book) -%>
+                    <% unless info.empty? -%>
+                      &mdash; <span class="book-pub"><%= h(info) %></span>
+                    <% end -%>
+                  </div>
+                </div>
+              </li>
+            <% end -%>
+          </ul>
+          <a href="#top" class="back-to-top">&#8593; Back to top</a>
+        </section>
       <% end -%>
     </div>
   </main>

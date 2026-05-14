@@ -14,7 +14,7 @@ module UCPECStatic
       return path if path.blank? || asset_url.blank?
       # :nocov:
 
-      URI.join(asset_url, path).to_s
+      "#{asset_url.chomp('/')}/#{path}"
     end
   end
 end

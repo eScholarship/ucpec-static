@@ -5,52 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= page_title ? "#{h(page_title)} | #{h(SITE_TITLE)}" : h(SITE_TITLE) %></title>
   <style>
-<%= base_css %>
+    <%= base_css %>
 
-/* Shared browse page styles */
-
-.browse-header {
-  margin-bottom: 2rem;
-}
-
-.browse-header p {
-  color: #666;
-  font-size: 1rem;
-  margin-top: 0.5rem;
-  text-indent: 0;
-}
-
-.book-title a {
-  color: #62708d;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.book-title a:hover {
-  text-decoration: underline;
-}
-
-.book-meta {
-  margin-top: 0.2rem;
-}
-
-.book-pub {
-  font-style: italic;
-  color: #777;
-}
-
-.book-list-cover {
-  width: 150px;
-  aspect-ratio: 2 / 3;
-  object-fit: cover;
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  flex-shrink: 0;
-  align-self: flex-start;
-  display: block;
-}
-
-<%= page_css %>
+    <%= page_css %>
   </style>
 </head>
 <body>
@@ -58,7 +15,10 @@
     <div class="container">
       <div class="brand-container">
         <h1 class="brand"><%= h(BRAND_NAME) %></h1>
-        <div class="tagline">formerly eScholarship Editions</div>
+        <div class="header-logos">
+          <a href="http://www.ucpress.edu"><img src="/img/ucpress_logo.png" alt="UC Press logo" class="header-logo"></a>
+          <a href="http://www.cdlib.org"><img src="/img/CDL_Logo.png" alt="California Digital Library logo" class="header-logo cdl"></a>
+        </div>
       </div>
       <nav class="main-nav">
         <ul>
@@ -71,16 +31,23 @@
     </div>
   </header>
 
-<%= page_content %>
+  <%= page_content %>
 
   <footer class="site-footer">
     <div class="container">
       <div class="footer-links">
         <a href="<%= base_path %>help.html">Help</a>
+        <a href="https://cdlib.org/about/policies-and-guidelines/privacy-statement/">Privacy Policy</a>
+        <a href="https://cdlib.org/about/policies-and-guidelines/accessibility/">Accessibility Statement</a>
       </div>
-      <p><%= h(BRAND_NAME) %> is a joint publication of the <a href="https://cdlib.org">California Digital Library</a> and <a href="https://ucpress.edu">University of California Press</a>.</p>
-      <p>&copy; 2025 The Regents of the University of California</p>
+      <p>
+        <%= h(BRAND_NAME) %> is a joint publication of the <a href="https://cdlib.org">California Digital Library</a> and <a href="https://ucpress.edu">University of California Press</a>.
+      </p>
+      <p>&copy; 2026 The Regents of the University of California</p>
     </div>
   </footer>
+  <% if page_js && !page_js.empty? -%>
+    <script><%= page_js %></script>
+  <% end -%>
 </body>
 </html>

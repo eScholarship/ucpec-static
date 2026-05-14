@@ -70,13 +70,13 @@ else
   # the container's filesystem
   ok = system(
     "docker", "run", "--rm",
-    "-e", "RUBY_FIBER_VM_STACK_SIZE=8388608",
     "-v", "#{input_dir}:/data/input",
     "-v", "#{fragment_dir.realpath}:/data/output",
+    "-v", "#{Pathname.new(options[:books]).realpath}:/data/books.json:ro",
     "ucpec_static:latest",
     "sh", "-c",
     "ls /data/input/*.xml | xargs -P #{options[:workers]} -I {} " \
-    "sh -c 'name=$(basename \"$1\" .xml); exe/ucpec_static t 2h \"$1\" > \"/data/output/$name.html\" && echo \"$name\" >&2' _ {}"
+    "sh -c 'name=$(basename \"$1\" .xml); exe/ucpec_static t 2h --books /data/books.json \"$1\" > \"/data/output/$name.html\" && echo \"$name\" >&2' _ {}"
   )
 
   abort "Docker conversion failed" unless ok

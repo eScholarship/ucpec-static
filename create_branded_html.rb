@@ -30,14 +30,16 @@ end
 input = Pathname.new(options[:input])
 abort "File not found: #{input}" unless input.exist?
 
-# Step 1: Convert TEI XML -> HTML fragment
+# Step 1: Convert TEI XML -> HTML fragment (with citation injected by the converter)
 input_dir  = input.realpath.dirname.to_s
 input_file = "/data/#{input.basename}"
+books_json = Pathname.new(__dir__).join("data/books.json").realpath.to_s
 tei_content, status = Open3.capture2(
   "docker", "run", "--rm",
   "-v", "#{input_dir}:/data",
+  "-v", "#{books_json}:/data/books.json:ro",
   "ucpec_static:latest",
-  "exe/ucpec_static", "t", "2h", input_file.to_s
+  "exe/ucpec_static", "t", "2h", "--books", "/data/books.json", input_file.to_s
 )
 abort "Conversion failed for #{input}" unless status.success?
 
