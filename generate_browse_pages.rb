@@ -13,8 +13,8 @@ require "pathname"
 require_relative "shared_page_helpers"
 
 def book_url(book)
-  prefix = book["public"] ? "/public" : "/uc"
-  "#{prefix}/book/#{slugify(book["title"])}.html"
+  prefix = book["public"] ? "public" : "uc"
+  "/ucpressebooks/#{prefix}/book/#{slugify(book["title"])}.html"
 end
 
 def pub_info(book)
