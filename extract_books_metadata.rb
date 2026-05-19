@@ -52,11 +52,24 @@ def mods_title(mods)
   ].compact.join
 end
 
-def mods_author(mods)
+def mods_author(mods, ucp = nil)
   return nil if mods.nil?
 
-  name = mods.at_xpath("mods:name[@type='personal']", NS)
-  name&.at_xpath("mods:namePart", NS)&.text&.strip
+  mods_name = mods.at_xpath("mods:name[@type='personal']", NS)
+  mods_namePart = mods_name&.at_xpath("mods:namePart", NS)&.text&.strip
+  return mods_namePart if ucp.nil?
+
+  # Cross-validate: if the MODS author's last name doesn't match UCPnum.Auth1LastName,
+  # the MODS section was probably merged from the wrong MARC record 
+  # Fall back to UCPnum.AUTHOR_CITATION (see ft5w1007fd for an example of this issue)
+  auth1 = data_of(ucp, "UCPnum.Auth1LastName").to_s.strip
+  if auth1.empty? || mods_namePart.nil?
+    mods_namePart
+  elsif mods_namePart.downcase.start_with?(auth1.downcase)
+    mods_namePart
+  else
+    data_of(ucp, "UCPnum.AUTHOR_CITATION")
+  end
 end
 
 def mods_year(origin)
@@ -154,7 +167,7 @@ def parse_mets(file)
     "ark"             => ark,
     "title"           => data_of(ucp, "UCPnum.Title"),
     "title_sort_key"  => title_sort_key(data_of(ucp, "UCPnum.TitleMain")),
-    "author"          => mods_author(mods),
+    "author"          => mods_author(mods, ucp),
     "author_citation" => data_of(ucp, "UCPnum.AUTHOR_CITATION"),
     "subjects"        => parse_subjects(ucp),
     "public"          => text_of(ucp, "public_nonPublic") == "Public",
