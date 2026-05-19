@@ -46,7 +46,18 @@
         }
       })
 
-      // Hide empty letter sections on the title browse page
+      // Hide empty author <details> sections and update their counts
+      document.querySelectorAll('details[id^="author-"]').forEach(details => {
+        const visibleItems = details.querySelectorAll('li[data-public]:not([hidden])')
+        details.hidden = visibleItems.length === 0
+        const countEl = details.querySelector('.author-count')
+        if (countEl) {
+          const count = visibleItems.length
+          countEl.textContent = `(${count} ${count === 1 ? 'title' : 'titles'})`
+        }
+      })
+
+      // Hide empty letter sections on the title/author browse pages
       document.querySelectorAll('.letter-section').forEach(section => {
         section.hidden = section.querySelectorAll('li[data-public]:not([hidden])').length === 0
       })
@@ -61,11 +72,6 @@
         }
       })
 
-      // Update the total count shown in the browse header
-      const countEl = document.querySelector('.browse-visible-count')
-      if (countEl) {
-        countEl.textContent = document.querySelectorAll('li[data-public]:not([hidden])').length
-      }
     }
   }
 

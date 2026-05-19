@@ -90,4 +90,38 @@ html = render_with_layout(title_template, binding, css_file: [browse_shared_css,
 output_dir.join("browse_title.html").write(html)
 warn "Wrote browse_title.html (#{current_books.size} titles)"
 
-warn "\nDone. 2 pages written to #{output_dir}/"
+# Browse by Author
+
+author_template = TEMPLATES.join("browse_author.html.erb")
+author_css      = TEMPLATES.join("browse_author.css")
+
+page_title = "Browse by Author"
+base_path  = ""
+
+# Build an ordered map of author -> books, skipping entries with no author
+authors_map = Hash.new { |h, k| h[k] = [] }
+all_books.each do |book|
+  author = book["author"]
+  next if author.nil? || author.strip.empty?
+  authors_map[author] << book
+end
+authors_map = authors_map.sort_by { |author, _| author.upcase }.to_h
+
+# Group authors by first letter of their name
+authors_by_letter = {}
+authors_map.each do |author, books|
+  first = author.upcase[0]
+  letter = first&.match?(/[A-Z]/) ? first : "Other"
+  authors_by_letter[letter] ||= []
+  authors_by_letter[letter] << [author, books]
+end
+authors_by_letter = authors_by_letter.sort_by { |k, _| k == "Other" ? "\xFF" : k }.to_h
+active_letters    = authors_by_letter.keys.reject { |k| k == "Other" }.sort
+has_other         = authors_by_letter.key?("Other")
+all_letters       = ("A".."Z").to_a
+
+html = render_with_layout(author_template, binding, css_file: [browse_shared_css, author_css], js_file: browse_filter_js)
+output_dir.join("browse_author.html").write(html)
+warn "Wrote browse_author.html (#{authors_map.size} authors)"
+
+warn "\nDone. 3 pages written to #{output_dir}/"
