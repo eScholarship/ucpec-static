@@ -72,6 +72,11 @@
         }
       })
 
+      // Update the total count shown in the browse header
+      const countEl = document.querySelector('.browse-visible-count')
+      if (countEl) {
+        countEl.textContent = document.querySelectorAll('li[data-public]:not([hidden])').length
+      }
     }
   }
 
