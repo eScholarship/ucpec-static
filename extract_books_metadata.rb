@@ -56,17 +56,17 @@ def mods_author(mods, ucp = nil)
   return nil if mods.nil?
 
   mods_name = mods.at_xpath("mods:name[@type='personal']", NS)
-  mods_namePart = mods_name&.at_xpath("mods:namePart", NS)&.text&.strip
-  return mods_namePart if ucp.nil?
+  mods_name_part = mods_name&.at_xpath("mods:namePart", NS)&.text&.strip
+  return mods_name_part if ucp.nil?
 
   # Cross-validate: if the MODS author's last name doesn't match UCPnum.Auth1LastName,
-  # the MODS section was probably merged from the wrong MARC record 
+  # the MODS section was probably merged from the wrong MARC record
   # Fall back to UCPnum.AUTHOR_CITATION (see ft5w1007fd for an example of this issue)
   auth1 = data_of(ucp, "UCPnum.Auth1LastName").to_s.strip
-  if auth1.empty? || mods_namePart.nil?
-    mods_namePart
-  elsif mods_namePart.downcase.start_with?(auth1.downcase)
-    mods_namePart
+  if auth1.empty? || mods_name_part.nil?
+    mods_name_part
+  elsif mods_name_part.downcase.start_with?(auth1.downcase)
+    mods_name_part
   else
     data_of(ucp, "UCPnum.AUTHOR_CITATION")
   end
