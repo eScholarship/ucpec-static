@@ -51,7 +51,6 @@ a {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-top: 0.5rem;
 }
 
 .header-logo {
@@ -59,19 +58,39 @@ a {
   width: auto;
 }
 
-.header-logo.cdl {
-  background: #fff;
+.secondary-nav {
+  background: #4a5570;
 }
 
-.main-nav ul {
-  list-style: none;
+.secondary-nav-inner {
   display: flex;
-  gap: 2rem;
+  justify-content: space-between;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
-.main-nav a {
-  color: white;
-  font-weight: 500;
+@media (max-width: 768px) {
+  .secondary-nav .secondary-nav-inner {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+}
+
+.secondary-nav-left,
+.secondary-nav-right {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.secondary-nav a {
+  color: #fff;
+  font-size: 0.875rem;
+}
+
+.browse-label {
+  color: #ccc;
+  font-size: 0.875rem;
+  font-style: italic;
 }
 
 .document-content {
