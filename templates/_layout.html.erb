@@ -14,7 +14,7 @@
   <header class="site-header">
     <div class="container">
       <div class="brand-container">
-        <h1 class="brand"><%= h(BRAND_NAME) %></h1>
+        <h1 class="brand"><a href="<%= base_path %>index.html"><%= h(BRAND_NAME) %></a></h1>
       </div>
       <div class="header-logos">
         <a href="http://www.ucpress.edu"><img src="/img/ucpress_logo.png" alt="UC Press logo" class="header-logo"></a>
@@ -27,6 +27,7 @@
       <div class="secondary-nav-left">
         <a href="<%= base_path %>index.html">Home</a>
         <a href="<%= base_path %>about.html">About</a>
+        <a href="<%= base_path %>help.html">Help</a>
       </div>
       <div class="secondary-nav-right">
         <span class="browse-label">Browse by:</span>
