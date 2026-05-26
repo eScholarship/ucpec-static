@@ -352,6 +352,10 @@ aside:target {
     font-size: 1.5rem;
   }
 
+  [data-tei-tag="front"] {
+    flex-direction: column;
+  }
+
   .toc-title {
     font-size: 1.5rem;
   }
