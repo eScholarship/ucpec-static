@@ -6,6 +6,7 @@
 # Usage:
 # ruby generate_static_pages.rb --output-dir ./output
 
+require "fileutils"
 require "optparse"
 require "pathname"
 require_relative "shared_page_helpers"
@@ -35,5 +36,8 @@ pages.each do |page|
   output_dir.join(page[:filename]).write(html)
   warn "Wrote #{page[:filename]}"
 end
+
+FileUtils.cp(Pathname.new(__dir__).join("data/publicTitles.txt"), output_dir.join("publicTitles.txt"))
+warn "Copied publicTitles.txt"
 
 warn "\nDone. #{pages.size} files written to #{output_dir}/"

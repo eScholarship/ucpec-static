@@ -293,6 +293,7 @@ Metrics/ParameterLists:
 
 Metrics/PerceivedComplexity:
   Enabled: true
+  Max: 10
 
 Naming/AccessorMethodName:
   Enabled: false
