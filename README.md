@@ -7,6 +7,40 @@ This project has two distinct responsibilities:
 
 ---
 
+## Prerequisites
+
+### TEI XML files (required for book page generation)
+
+TEI XML files must be present locally in `./tei/` before running `convert_books.rb`. They are not committed to this repo and are not downloaded automatically. Sync them from S3:
+
+```bash
+aws s3 sync s3://ucpec/book_files/ ./tei/ \
+  --exclude "*" \
+  --include "*.xml" \
+  --profile <profile>
+```
+
+### METS XML files (required to rebuild `books.json`)
+
+`data/books.json` is a committed metadata cache. You only need the METS files if you're refreshing that cache (new records, new fields, etc.). Sync them from S3:
+
+```bash
+aws s3 sync s3://ucpec/book_files/ ./tmp/book_files/ \
+  --exclude "*" \
+  --include "*.mets.xml" \
+  --profile <profile>
+```
+
+Then regenerate the cache:
+
+```bash
+ruby extract_books_metadata.rb \
+  --mets-dir ./tmp/book_files \
+  --output ./data/books.json
+```
+
+---
+
 ## Full site generation workflow
 
 **1. Build the Docker image** (required for TEI → HTML conversion)
@@ -163,22 +197,7 @@ You'll need to regenerate `books.json` whenever:
 - You want to extract additional metadata fields from the METS files (e.g. adding a new attribute to the `Book` structure in `extract_books_metadata.rb`)
 - You make any other changes to the shape or content of `books.json` — downstream scripts (`convert_books.rb`, `generate_browse_pages.rb`) all read from this cache, so any structural change requires a fresh file
 
-First, sync the METS XML files from S3 locally:
-
-```bash
-aws s3 sync s3://ucpec/book_files/ ./tmp/book_files/ \
-  --exclude "*" \
-  --include "*.mets.xml" \
-  --profile <profile>
-```
-
-Then parse them and write a new cache:
-
-```bash
-ruby extract_books_metadata.rb \
-  --mets-dir ./tmp/book_files \
-  --output ./data/books.json
-```
+See [Prerequisites](#prerequisites) for the sync and extraction commands.
 
 After verifying the output, commit the updated file and push so others can use it.
 
