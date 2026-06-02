@@ -349,11 +349,18 @@ aside:target {
 
 [data-type="index"] p.IndentHanging {
   text-indent: 0;
+  padding-left: 2em;
 }
 
 [data-type="index"] p.IndentHanging2 {
   text-indent: 0;
-  padding-left: 1em;
+  padding-left: 3em;
+}
+
+[data-type="bibliography"] p.IndentHanging,
+[data-type="glossary"] p.IndentHanging {
+  text-indent: -2em;
+  padding-left: 3em;
 }
 
 @media (max-width: 768px) {
