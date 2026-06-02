@@ -347,6 +347,15 @@ aside:target {
   }
 }
 
+[data-type="index"] p.IndentHanging {
+  text-indent: 0;
+}
+
+[data-type="index"] p.IndentHanging2 {
+  text-indent: 0;
+  padding-left: 1em;
+}
+
 @media (max-width: 768px) {
   [data-tei-tag="titlePage"] h1 {
     font-size: 1.5rem;
