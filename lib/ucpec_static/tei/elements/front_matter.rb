@@ -108,7 +108,7 @@ module UCPECStatic
           date_str  = raw_date.start_with?("c") ? "#{raw_date} #{year}" : year
 
           html_builder.text "Preferred Citation: "
-          html_builder.text "#{author}. " unless author.empty?
+          html_builder.text(author.end_with?(".") ? "#{author} " : "#{author}. ") unless author.empty?
           wrap_with_tag!("cite") { html_builder.text title } unless title.empty?
           html_builder.text ". " unless title.empty?
           location = [place, publisher].reject(&:empty?).join(":  ")
