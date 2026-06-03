@@ -24,7 +24,8 @@ output_dir.mkpath
 pages = [
   { filename: "index.html", template: "home.html.erb", title: "Home", css: "home.css" },
   { filename: "about.html", template: "about.html.erb", title: "About" },
-  { filename: "help.html", template: "help.html.erb", title: "Help" }
+  { filename: "help.html", template: "help.html.erb", title: "Help" },
+  { filename: "403.html", template: "403.html.erb", title: "Access Restricted" }
 ]
 
 pages.each do |page|
