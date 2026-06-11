@@ -14,7 +14,7 @@ require_relative "shared_page_helpers"
 
 def book_url(book)
   prefix = book["public"] ? "public" : "uc"
-  "/ucpressebooks/#{prefix}/book/#{slugify(book["title"])}.html"
+  "#{BASE_PATH}#{prefix}/book/#{slugify(book["title"])}.html"
 end
 
 def pub_info(book)
@@ -56,7 +56,7 @@ browse_filter_js = TEMPLATES.join("browse_filter.js")
 
 current_books = all_books
 page_title    = "Browse by Subject"
-base_path     = ""
+base_path     = BASE_PATH
 
 subjects_map = Hash.new { |h, k| h[k] = [] }
 current_books.each do |book|
@@ -75,7 +75,7 @@ title_css      = TEMPLATES.join("browse_title.css")
 
 current_books = all_books.sort_by { |b| b["title_sort_key"] }
 page_title    = "Browse by Title"
-base_path     = ""
+base_path     = BASE_PATH
 
 books_by_letter = current_books.group_by do |b|
   first = b["title_sort_key"].sub(/\A[^A-Z0-9]+/, "")[0]
@@ -96,7 +96,7 @@ author_template = TEMPLATES.join("browse_author.html.erb")
 author_css      = TEMPLATES.join("browse_author.css")
 
 page_title = "Browse by Author"
-base_path  = ""
+base_path  = BASE_PATH
 
 # Build an ordered map of author -> books, skipping entries with no author
 authors_map = Hash.new { |h, k| h[k] = [] }

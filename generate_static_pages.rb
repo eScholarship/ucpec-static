@@ -30,7 +30,7 @@ pages = [
 
 pages.each do |page|
   page_title = page[:title]
-  base_path  = ""
+  base_path  = BASE_PATH
   css_file   = page[:css] ? TEMPLATES.join(page[:css]) : nil
   html = render_with_layout(TEMPLATES.join(page[:template]), binding, css_file: css_file)
 
