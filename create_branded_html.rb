@@ -45,7 +45,7 @@ abort "Conversion failed for #{input}" unless status.success?
 
 # Step 2: Wrap in the shared layout template
 page_title = nil
-base_path  = ""
+base_path  = BASE_PATH
 book_css   = TEMPLATES.join("styles.css")
 
 html = render_with_layout(TEMPLATES.join("book.html.erb"), binding, css_file: book_css)

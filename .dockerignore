@@ -1,1 +1,7 @@
 ./data
+tei/
+output/
+tmp/
+coverage/
+spec/
+.git/

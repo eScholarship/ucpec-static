@@ -11,6 +11,7 @@ include ERB::Util # rubocop:disable Style/MixinUsage
 SITE_TITLE = "UC Press E-Books Collection, 1982-2004"
 BRAND_NAME = "UC Press E-Books Collection, 1982-2004"
 TEMPLATES  = Pathname.new(__dir__).join("templates")
+BASE_PATH  = "/ucpressebooks/"
 
 def render(template_path, b)
   ERB.new(File.read(template_path), trim_mode: "-").result(b)
