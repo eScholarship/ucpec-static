@@ -1,69 +1,65 @@
-  <main class="document-content" id="top">
-    <div class="container">
-      <div class="browse-header">
-        <h1><%= h(page_title) %></h1>
-        <p><span class="browse-visible-count"><%= authors_map.size %></span> authors. Jump to a letter or scroll to browse.</p>
-      </div>
+<div class="browse-header">
+  <h1><%= h(page_title) %></h1>
+  <p><span class="browse-visible-count"><%= authors_map.size %></span> authors. Jump to a letter or scroll to browse.</p>
+</div>
 
-      <fieldset class="browse-filter">
-        <legend>Filter by access</legend>
-        <label><input type="radio" name="visibility-filter" value="all" checked> All</label>
-        <label><input type="radio" name="visibility-filter" value="public"> Public</label>
-      </fieldset>
+<fieldset class="browse-filter">
+  <legend>Filter by access</legend>
+  <label><input type="radio" name="visibility-filter" value="all" checked> All</label>
+  <label><input type="radio" name="visibility-filter" value="public"> Public</label>
+</fieldset>
 
-      <nav class="alpha-nav" aria-label="Alphabetical navigation">
-        <% all_letters.each do |letter| -%>
-          <% if active_letters.include?(letter) -%>
-            <a href="#letter-<%= letter %>"><%= letter %></a>
-          <% else -%>
-            <span aria-hidden="true"><%= letter %></span>
+<nav class="alpha-nav" aria-label="Alphabetical navigation">
+  <% all_letters.each do |letter| -%>
+    <% if active_letters.include?(letter) -%>
+      <a href="#letter-<%= letter %>"><%= letter %></a>
+    <% else -%>
+      <span aria-hidden="true"><%= letter %></span>
+    <% end -%>
+  <% end -%>
+
+  <% if has_other -%>
+    <a href="#letter-Other">Other</a>
+  <% end -%>
+</nav>
+
+<% authors_by_letter.each do |letter, authors_in_section| -%>
+  <section class="letter-section" id="letter-<%= letter %>">
+    <h2><%= h(letter) %></h2>
+
+    <% authors_in_section.each do |author, books_for_author| -%>
+      <details id="author-<%= slugify(author) %>">
+        <summary>
+          <%= h(author) %>
+          <span class="author-count">(<%= books_for_author.size %> <%= books_for_author.size == 1 ? "title" : "titles" %>)</span>
+        </summary>
+        <ul>
+          <% books_for_author.sort_by { |b| b["title_sort_key"] }.each do |book| -%>
+            <li data-public="<%= book["public"] ? 'true' : 'false' %>">
+              <img class="book-list-cover" src="/img/<%= book["ark"] %>_cover.jpg" alt="" width="150" height="225" loading="lazy" onerror="this.style.visibility='hidden'">
+              <div>
+                <div class="book-title">
+                  <a href="<%= book_url(book) %>"><%= h(book["title"]) %></a>
+                  <% if book["public"] -%>
+                    <span class="public-badge">public</span>
+                  <% end -%>
+                </div>
+                <div class="book-meta">
+                  <% if book["author"] && !book["author"].empty? -%>
+                    <%= h(book["author"]) %>
+                  <% end -%>
+                  <% info = pub_info(book) -%>
+                  <% unless info.empty? -%>
+                    &mdash; <span class="book-pub"><%= h(info) %></span>
+                  <% end -%>
+                </div>
+              </div>
+            </li>
           <% end -%>
-        <% end -%>
+        </ul>
+      </details>
+    <% end -%>
 
-        <% if has_other -%>
-          <a href="#letter-Other">Other</a>
-        <% end -%>
-      </nav>
-
-      <% authors_by_letter.each do |letter, authors_in_section| -%>
-        <section class="letter-section" id="letter-<%= letter %>">
-          <h2><%= h(letter) %></h2>
-
-          <% authors_in_section.each do |author, books_for_author| -%>
-            <details id="author-<%= slugify(author) %>">
-              <summary>
-                <%= h(author) %>
-                <span class="author-count">(<%= books_for_author.size %> <%= books_for_author.size == 1 ? "title" : "titles" %>)</span>
-              </summary>
-              <ul>
-                <% books_for_author.sort_by { |b| b["title_sort_key"] }.each do |book| -%>
-                  <li data-public="<%= book["public"] ? 'true' : 'false' %>">
-                    <img class="book-list-cover" src="/img/<%= book["ark"] %>_cover.jpg" alt="" width="150" height="225" loading="lazy" onerror="this.style.visibility='hidden'">
-                    <div>
-                      <div class="book-title">
-                        <a href="<%= book_url(book) %>"><%= h(book["title"]) %></a>
-                        <% if book["public"] -%>
-                          <span class="public-badge">public</span>
-                        <% end -%>
-                      </div>
-                      <div class="book-meta">
-                        <% if book["author"] && !book["author"].empty? -%>
-                          <%= h(book["author"]) %>
-                        <% end -%>
-                        <% info = pub_info(book) -%>
-                        <% unless info.empty? -%>
-                          &mdash; <span class="book-pub"><%= h(info) %></span>
-                        <% end -%>
-                      </div>
-                    </div>
-                  </li>
-                <% end -%>
-              </ul>
-            </details>
-          <% end -%>
-
-          <a href="#top" class="back-to-top">&#8593; Back to top</a>
-        </section>
-      <% end -%>
-    </div>
-  </main>
+    <a href="#main-content" class="back-to-top">&#8593; Back to top</a>
+  </section>
+<% end -%>

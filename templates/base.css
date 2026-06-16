@@ -18,6 +18,26 @@ a {
   color: #62708d;
 }
 
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 5px;
+  z-index: 1000;
+  padding: 10px;
+  background: #4a5570;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 3px;
+}
+
+.skip-link:focus {
+  left: 5px;
+}
+
+.document-content:focus {
+  outline: none;
+}
+
 .container {
   max-width: 1280px;
   margin: 0 auto;
