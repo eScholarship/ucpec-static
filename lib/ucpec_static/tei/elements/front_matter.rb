@@ -104,7 +104,7 @@ module UCPECStatic
           publisher = meta["publisher"].to_s
           year      = meta["year"].to_s
           ark       = meta["ark"].to_s
-      
+
           html_builder.text "Preferred Citation: "
           html_builder.text(author.end_with?(".") ? "#{author} " : "#{author}. ") unless author.empty?
           wrap_with_tag!("cite") { html_builder.text title } unless title.empty?
