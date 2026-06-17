@@ -85,3 +85,9 @@ details li:last-child {
 .book-description {
   margin-top: 0.5rem;
 }
+
+@media (max-width: 768px) {
+  details li {
+    flex-direction: column;
+  }
+}

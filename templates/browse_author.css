@@ -139,3 +139,9 @@ details li {
 details li:last-child {
   border-bottom: none;
 }
+
+@media (max-width: 768px) {
+  details li {
+    flex-direction: column;
+  }
+}
