@@ -54,6 +54,8 @@
   grid-template-columns: repeat(4, 150px);
   gap: 3.5rem;
   margin-top: 1.5rem;
+  list-style: none;
+  padding: 0;
 }
 
 .home-cover-item {
