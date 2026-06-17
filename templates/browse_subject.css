@@ -30,7 +30,7 @@ details summary::-webkit-details-marker {
 }
 
 details summary::before {
-  content: "▶";
+  content: "▶" / "";
   font-size: 0.7rem;
   color: #62708d;
   transition: transform 0.2s ease;
