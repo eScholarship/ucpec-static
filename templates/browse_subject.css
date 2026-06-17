@@ -9,7 +9,7 @@ details {
   border: 1px solid #dee2e6;
   border-radius: 6px;
   margin-bottom: 0.5rem;
-  overflow: hidden;
+  overflow: clip;
 }
 
 details summary {
