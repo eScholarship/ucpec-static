@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# Generates static HTML pages (home, about, help) from ERB templates
+# Generates static HTML pages (home, about, help, error) from ERB templates
 
 # Usage:
 # ruby generate_static_pages.rb --output-dir ./output
@@ -25,7 +25,8 @@ pages = [
   { filename: "index.html", template: "home.html.erb", title: "Home", css: "home.css" },
   { filename: "about.html", template: "about.html.erb", title: "About" },
   { filename: "help.html", template: "help.html.erb", title: "Help" },
-  { filename: "403.html", template: "403.html.erb", title: "Access Restricted" }
+  { filename: "403.html", template: "403.html.erb", title: "Access Restricted" },
+  { filename: "404.html", template: "404.html.erb", title: "Page Not Found" }
 ]
 
 pages.each do |page|
