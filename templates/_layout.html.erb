@@ -11,13 +11,14 @@
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
   <header class="site-header">
     <div class="container">
       <div class="brand-container">
-        <h1 class="brand"><a href="<%= base_path %>index.html"><%= h(BRAND_NAME) %></a></h1>
+        <p class="brand"><a href="<%= base_path %>index.html"><%= h(BRAND_NAME) %></a></p>
       </div>
       <div class="header-logos">
-        <a href="http://www.ucpress.edu"><img src="/img/ucpress_logo.png" alt="UC Press logo" class="header-logo"></a>
+        <a href="http://www.ucpress.edu"><img src="/img/ucpress_logo.png" alt="University of California Press logo" class="header-logo"></a>
         <a href="http://www.cdlib.org"><img src="/img/CDL_Logo.svg" alt="California Digital Library logo" class="header-logo"></a>
       </div>
     </div>
@@ -38,7 +39,11 @@
     </div>
   </nav>
 
-  <%= page_content %>
+  <main class="document-content" id="main-content" tabindex="-1">
+    <div class="container">
+      <%= page_content %>
+    </div>
+  </main>
 
   <footer class="site-footer">
     <div class="container">

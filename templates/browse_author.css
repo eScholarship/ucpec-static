@@ -26,12 +26,12 @@
 }
 
 .alpha-nav a {
-  color: #62708d;
+  color: #414A5D;
   background: #e2e6f0;
 }
 
 .alpha-nav a:hover {
-  background: #62708d;
+  background: #414A5D;
   color: #fff;
 }
 
@@ -80,7 +80,7 @@ details {
   border: 1px solid #dee2e6;
   border-radius: 6px;
   margin-bottom: 0.5rem;
-  overflow: hidden;
+  overflow: clip;
 }
 
 details summary {
@@ -101,7 +101,7 @@ details summary::-webkit-details-marker {
 }
 
 details summary::before {
-  content: "▶";
+  content: "▶" / "";
   font-size: 0.7rem;
   color: #62708d;
   transition: transform 0.2s ease;
@@ -138,4 +138,10 @@ details li {
 
 details li:last-child {
   border-bottom: none;
+}
+
+@media (max-width: 768px) {
+  details li {
+    flex-direction: column;
+  }
 }

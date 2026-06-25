@@ -18,6 +18,47 @@ a {
   color: #62708d;
 }
 
+/* Cross-browser focus styles - overrides firefox macOS dotted outline */
+:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
+/* on dark header/nav backgrounds the blue outline is invisible */
+.site-header :focus-visible,
+.secondary-nav :focus-visible {
+  outline-color: #fff;
+}
+
+details:focus-visible {
+  outline: none;
+}
+
+summary:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: -3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 5px;
+  z-index: 1000;
+  padding: 10px;
+  background: #4a5570;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 3px;
+}
+
+.skip-link:focus {
+  left: 5px;
+}
+
+.document-content:focus {
+  outline: none;
+}
+
 .container {
   max-width: 1280px;
   margin: 0 auto;
@@ -44,6 +85,7 @@ a {
   border-bottom: none;
   padding: 0;
   margin: 0;
+  text-indent: 0;
 }
 
 .brand a {

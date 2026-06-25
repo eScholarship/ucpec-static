@@ -9,7 +9,7 @@ details {
   border: 1px solid #dee2e6;
   border-radius: 6px;
   margin-bottom: 0.5rem;
-  overflow: hidden;
+  overflow: clip;
 }
 
 details summary {
@@ -30,7 +30,7 @@ details summary::-webkit-details-marker {
 }
 
 details summary::before {
-  content: "▶";
+  content: "▶" / "";
   font-size: 0.7rem;
   color: #62708d;
   transition: transform 0.2s ease;
@@ -84,4 +84,10 @@ details li:last-child {
 
 .book-description {
   margin-top: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  details li {
+    flex-direction: column;
+  }
 }
