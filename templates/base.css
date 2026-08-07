@@ -30,9 +30,8 @@ a {
 	margin-top: 1.5rem;
 	gap: 1rem;
 	padding: 12px;
-	/* max-width: 1280px; */
+	max-width: 1280px;
 	color: #2C3E50;
-	/* font-family: georgia, serif; */
 	font-weight: medium;
 	font-size: 0.9rem;
 	font-style: italic;
