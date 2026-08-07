@@ -74,7 +74,7 @@ summary:focus-visible {
 
 .site-header .container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
 
@@ -93,13 +93,14 @@ summary:focus-visible {
   text-decoration: none;
 }
 
-.header-logos {
+.footer-logos {
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 1rem;
 }
 
-.header-logo {
+.footer-logo {
   height: 3rem;
   width: auto;
 }
@@ -200,20 +201,12 @@ h1 {
 }
 
 @media (max-width: 1200px) {
-  .site-header .container {
-    flex-direction: column;
-    gap: 1rem;
-  }
 
   .brand-container {
     text-align: center;
   }
 
-  .header-logos {
-    justify-content: center;
-  }
-
-  .header-logo {
+  .footer-logo {
     height: 2rem;
   }
 }
