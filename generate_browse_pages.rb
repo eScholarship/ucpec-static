@@ -21,12 +21,6 @@ def pub_info(book)
   [book["publisher"], book["year"]].compact.reject(&:empty?).join(", ")
 end
 
-# Converts a string to a URL/HTML-ID-safe slug
-# (e.g. "Cinema and Performance Arts" -> "cinema-and-performance-arts")
-def slugify(str)
-  str.downcase.gsub(/[^a-z0-9]+/, "-").delete_prefix("-").delete_suffix("-")
-end
-
 options = { books: "./data/books.json", output_dir: "./output" }
 
 OptionParser.new do |opts|
