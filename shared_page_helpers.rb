@@ -12,6 +12,18 @@ SITE_TITLE = "UC Press E-Books Collection, 1982-2004"
 BRAND_NAME = "UC Press E-Books Collection, 1982-2004"
 TEMPLATES  = Pathname.new(__dir__).join("templates")
 BASE_PATH  = "/ucpressebooks/"
+SITE_URL   = "https://publishing.cdlib.org"
+
+# Joins an absolute site path (e.g. "/ucpressebooks/index.html") onto SITE_URL
+def absolute_url(path)
+  "#{SITE_URL}#{path.start_with?('/') ? path : "/#{path}"}"
+end
+
+# Converts a string to a URL/HTML-ID-safe slug
+# (e.g. "Cinema and Performance Arts" -> "cinema-and-performance-arts")
+def slugify(str)
+  str.downcase.gsub(/[^a-z0-9]+/, "-").delete_prefix("-").delete_suffix("-")
+end
 
 def render(template_path, b)
   ERB.new(File.read(template_path), trim_mode: "-").result(b)
