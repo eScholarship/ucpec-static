@@ -42,4 +42,13 @@ end
 FileUtils.cp(Pathname.new(__dir__).join("data/publicTitles.txt"), output_dir.join("publicTitles.txt"))
 warn "Copied publicTitles.txt"
 
+# Copy static assets (e.g. Klaro)
+assets_src = Pathname.new(__dir__).join("assets")
+if assets_src.directory?
+  assets_dest = output_dir.join("assets")
+  FileUtils.rm_rf(assets_dest)
+  FileUtils.cp_r(assets_src, assets_dest)
+  warn "Copied assets/ -> #{assets_dest}/"
+end
+
 warn "\nDone. #{pages.size} files written to #{output_dir}/"

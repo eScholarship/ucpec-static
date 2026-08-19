@@ -212,7 +212,7 @@ Options:
 ruby generate_static_pages.rb --output-dir ./output
 ```
 
-Renders `index.html`, `about.html`, and `help.html` from templates in `templates/`, writing them directly into `--output-dir`.
+Renders `index.html`, `about.html`, `help.html`, `403.html`, and `404.html` from templates in `templates/`, writing them directly into `--output-dir`. It also copies `publicTitles.txt` and the `assets/` directory (the vendored Klaro consent-manager bundle) into `--output-dir`.
 
 Options:
 
