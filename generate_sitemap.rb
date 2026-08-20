@@ -44,7 +44,7 @@ unless File.exist?(options[:books])
   exit 1
 end
 
-all_books   = JSON.parse(File.read(options[:books], encoding: "UTF-8"))
+all_books = JSON.parse(File.read(options[:books], encoding: "UTF-8"))
 public_books = all_books.select { |b| b["public"] }
 
 output_dir = Pathname.new(options[:output_dir])
