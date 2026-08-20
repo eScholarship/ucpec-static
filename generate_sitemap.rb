@@ -68,6 +68,7 @@ robots = <<~ROBOTS
   User-agent: *
   Allow: #{BASE_PATH}
   Disallow: #{BASE_PATH}uc/
+  Crawl-delay: 5
   Sitemap: #{absolute_url("#{BASE_PATH}sitemap.xml")}
 ROBOTS
 
