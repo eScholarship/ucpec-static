@@ -9,7 +9,8 @@
 #   ./deploy.sh --profile <aws-profile> --env stg --execute
 
 # Syncs:
-#   output/  -> s3://ucpec/<env>/ucpressebooks/
+#   output/ -> s3://ucpec/<env>/ucpressebooks/
+#   output/robots.txt -> s3://ucpec/<env>/robots.txt (domain root)
 
 set -euo pipefail
 
@@ -47,6 +48,7 @@ SYNC_ARGS=(
   --profile "$PROFILE"
   --delete
   --exclude ".DS_Store"
+  --exclude "robots.txt"
 )
 
 if $DRY_RUN; then
@@ -61,6 +63,18 @@ echo ""
 
 echo "Syncing output/ ..."
 aws s3 sync "${OUTPUT_DIR}/" "${S3_BASE}/" "${SYNC_ARGS[@]}"
+
+# robots.txt is only honored by crawlers at the domain root
+ROBOTS_SRC="${OUTPUT_DIR}/robots.txt"
+if [[ -f "$ROBOTS_SRC" && "$ENV" == "prd" ]]; then
+  echo ""
+  echo "Placing robots.txt at site root ..."
+  CP_ARGS=(--profile "$PROFILE")
+  if $DRY_RUN; then
+    CP_ARGS+=(--dryrun)
+  fi
+  aws s3 cp "$ROBOTS_SRC" "s3://${BUCKET}/${ENV}/robots.txt" "${CP_ARGS[@]}"
+fi
 
 echo ""
 if $DRY_RUN; then

@@ -67,7 +67,16 @@ ruby generate_browse_pages.rb --books ./data/books.json --output-dir ./output
 ruby generate_static_pages.rb --output-dir ./output
 ```
 
-**5. Deploy to S3**
+**5. Generate sitemap.xml and robots.txt**
+
+```bash
+ruby generate_sitemap.rb --books ./data/books.json --output-dir ./output
+```
+
+The sitemap lists the static/browse pages and the public book pages as absolute
+URLs rooted at `https://publishing.cdlib.org`.
+
+**6. Deploy to S3**
 
 ```bash
 # Dry run first to review changes
