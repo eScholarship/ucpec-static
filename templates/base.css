@@ -135,16 +135,6 @@ summary:focus-visible {
   padding-bottom: 0.5rem;
 }
 
-@media (max-width: 768px) {
-  .secondary-nav .secondary-nav-inner {
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
-  }
-}
-
 .secondary-nav-left,
 .secondary-nav-right {
   display: flex;
@@ -205,6 +195,14 @@ h1 {
 }
 
 @media (max-width: 768px) {
+  .secondary-nav .secondary-nav-inner {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
   .main-nav ul {
     gap: 1rem;
   }
