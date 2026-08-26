@@ -364,8 +364,17 @@ aside:target {
 }
 
 @media (max-width: 768px) {
+  .brand {
+    font-size: 1.5rem;
+  }
+
   [data-tei-tag="titlePage"] h1 {
     font-size: 1.5rem;
+    margin: 0;
+  }
+
+  .book-cover {
+    margin: 2rem 0 0;
   }
 
   [data-tei-tag="front"] {
