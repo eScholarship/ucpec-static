@@ -108,7 +108,7 @@ fragments.each_with_index do |fragment, i|
   filename = "#{slug}.html"
 
   tei_content = fragment.read
-  page_title  = nil
+  page_title  = book["title"]
   base_path   = BASE_PATH
   html = render_with_layout(TEMPLATES.join("book.html.erb"), binding, css_file: book_css)
 
