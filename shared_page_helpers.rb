@@ -8,8 +8,8 @@ require "pathname"
 
 include ERB::Util # rubocop:disable Style/MixinUsage
 
-SITE_TITLE = "UC Press E-Books Collection, 1982-2004"
-BRAND_NAME = "UC Press E-Books Collection, 1982-2004"
+SITE_TITLE = "UC Press E-Books Collection Archive, 1982-2004"
+BRAND_NAME = "UC Press E-Books Collection Archive, 1982-2004"
 TEMPLATES  = Pathname.new(__dir__).join("templates")
 BASE_PATH  = "/ucpressebooks/"
 SITE_URL   = "https://publishing.cdlib.org"

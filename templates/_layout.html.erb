@@ -36,10 +36,6 @@
       <div class="brand-container">
         <p class="brand"><a href="<%= base_path %>index.html"><%= h(BRAND_NAME) %></a></p>
       </div>
-      <div class="header-logos">
-        <a href="http://www.ucpress.edu"><img src="/img/ucpress_logo.png" alt="University of California Press logo" class="header-logo"></a>
-        <a href="http://www.cdlib.org"><img src="/img/CDL_Logo.svg" alt="California Digital Library logo" class="header-logo"></a>
-      </div>
     </div>
   </header>
   <nav class="secondary-nav">
@@ -58,6 +54,15 @@
     </div>
   </nav>
 
+  <section class="accessibility-notice" aria-label="accessibility notice">
+	  <div>
+	  	<img id="acc-icon" src="/img/acc-icon.svg" aria-hidden="true"/>
+	  </div>
+    <div>
+      This website contains archived content made available for reference, research, or recordkeeping purposes. These materials are not actively maintained and may not meet current accessibility standards, such as WCAG 2.1 Level AA. If you need assistance accessing this content or require an accessible format, <a href="https://cdlib.org/about/policies-and-guidelines/accessibility/">please contact us</a>. We are committed to ensuring access for all users and will provide accommodations promptly upon request.
+    </div> 
+  </section>
+
   <main class="document-content" id="main-content" tabindex="-1">
     <div class="container">
       <%= page_content %>
@@ -65,6 +70,10 @@
   </main>
 
   <footer class="site-footer">
+    <div class="footer-logos">
+      <a href="http://www.ucpress.edu"><img src="/img/ucpress_logo.svg" alt="University of California Press logo" class="footer-logo"></a>
+      <a href="http://www.cdlib.org"><img src="/img/CDL_Logo.svg" alt="California Digital Library logo" class="footer-logo"></a>
+    </div>
     <div class="container">
       <div class="footer-links">
         <a href="<%= base_path %>help.html">Help</a>
